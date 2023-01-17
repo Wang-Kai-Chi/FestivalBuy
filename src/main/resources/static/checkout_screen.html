@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>結帳畫面</title>
+    <link rel="stylesheet" href="./css/cart.css">
+    <style>
+        .payCheckout {
+            padding: 25px;
+            position: absolute;
+            left: 50%;
+            margin-left: -400px;
+            background-color: antiquewhite;
+            text-align: left;
+        }
+        #confirm{
+            text-align: right;
+        }
+        legend{
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="payCheckout">
+        <form action="./checkout_finished.html">
+            <fieldset>
+                <legend>選擇付款方式</legend>
+                <input type="radio" name="payment" id="credit-card" value="1">
+                <label for="credit-card">信用卡線上刷卡</label>
+                <br><br>
+                <input type="radio" name="payment" id="seven" value="2">
+                <label for="seven">7-11取貨付款</label>
+                <br><br>
+                <input type="radio" name="payment" id="easy-wallet" value="3">
+                <label for="easy-wallet">悠遊卡</label>
+                <br><br>
+                <input type="radio" name="payment" id="atm" value="4">
+                <label for="atm">ATM付款(轉帳/線上繳款)</label>
+                <br><br>
+
+            </fieldset>
+
+            <fieldset>
+                <legend>訂購人資訊</legend>
+                <label>姓名</label><input type="text"/>
+                <br><br>
+                <label>電話/手機</label><input type="text" />
+                <br><br>
+                <label>Email</label><input type="email" />
+                <br><br>
+            </fieldset>
+            
+            <fieldset>
+                <legend>收件地址</legend>
+                <input type="number" name="zipcode" placeholder="郵遞區號" size="3">
+                <br><br>
+                <input type="text" name="address" placeholder="詳細地址" size="50"/>
+            </fieldset>
+
+            <fieldset id="confirm">
+                <input type="submit" value="確認結帳"/>
+            </fieldset>
+        </form>
+    </div>
+
+</body>
+
+</html>
