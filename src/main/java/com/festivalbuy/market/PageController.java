@@ -11,5 +11,18 @@ public class PageController {
 		return "shopping_cart";
 	}
 	
+	@RequestMapping("/checkout_screen")
+	String checkout_screen() {
+		return "checkout_screen";
+	}
 	
+	@RequestMapping("/checkout_finished")
+	String checkout_finished() {
+		return "checkout_finished";
+	}
+	
+	@RequestMapping("/order_tracking")
+	String order_tracking() {
+		return "order_tracking";
+	}
 }
