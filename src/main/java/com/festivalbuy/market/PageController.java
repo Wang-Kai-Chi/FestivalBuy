@@ -25,4 +25,14 @@ public class PageController {
 	String order_tracking() {
 		return "order_tracking";
 	}
+
+	@RequestMapping("/front_page")
+	String front_page(){
+		return "front_page";
+	}
+
+	@RequestMapping("/product_page")
+	String product_page(){
+		return "product_page";
+	}
 }
