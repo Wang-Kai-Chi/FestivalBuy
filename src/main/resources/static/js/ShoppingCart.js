@@ -1,18 +1,40 @@
-import * as orders from "./Orders.js"
+import * as orders from "./Data.js"
 
 main()
 
 function main() {
     const cartTable = document.getElementById("cart-body")
-    const list = orders.list
+    const list = initOrderList()
 
     refreshTable(cartTable, list)
 
     showOrderDetail(orders.orderDetail, list)
-
+    
     setEvenListenerToDeleteBtns(cartTable, list)
 
-    document.getElementById("delete-all").onclick = () => clearCart(list)
+    document.getElementById("delete-all").onclick = () => clearCart(cartTable,list)
+}
+
+function initOrderList(){
+    const list = []
+
+    saveStorage()
+    
+    let cartData = loadStorage()
+    
+    for(const i in cartData)
+        list.push(cartData[i])
+
+    return list
+}
+
+function saveStorage(){
+    localStorage.setItem("order", JSON.stringify(orders.products))
+}
+
+function loadStorage(){
+    let order = localStorage.getItem("order")
+    return JSON.parse(order)
 }
 
 function refreshTable(table, list) {
@@ -74,7 +96,12 @@ function showOrderDetail(orderDetail, list) {
         component[i].innerHTML = orderDetail[i]
 }
 
-function clearCart(list) {
+function clearCart(table, list) {
+    for(const i in table.rows)
+        table.deleteRow(i)
+
+    localStorage.removeItem("order")
+
     console.log(list)
 }
 
@@ -84,8 +111,10 @@ function setEvenListenerToDeleteBtns(table, list) {
 
         btn.onclick = () => {
             for (const j in list) {
-                if (list[j].id == i) 
+                if (list[j].id == i){
+                    list.slice(j)
                     console.log(list[j])
+                }
             }
         }
     }
