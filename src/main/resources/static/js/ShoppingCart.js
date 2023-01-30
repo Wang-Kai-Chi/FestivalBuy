@@ -1,9 +1,22 @@
 import * as orders from "./Orders.js"
 
-const cartTable = document.getElementById("cart-body")
+main()
 
-function refreshTable(table, orders) {
-    for (let i of orders) {
+function main() {
+    const cartTable = document.getElementById("cart-body")
+    const list = orders.list
+
+    refreshTable(cartTable, list)
+
+    showOrderDetail(orders.orderDetail, list)
+
+    setEvenListenerToDeleteBtns(cartTable, list)
+
+    document.getElementById("delete-all").onclick = () => clearCart(list)
+}
+
+function refreshTable(table, list) {
+    for (let i of list) {
         let info = i
         let data = {
             details: `<img src="${info.pic}" width="120">` + info.name,
@@ -19,13 +32,13 @@ function refreshTable(table, orders) {
             inStock: null,
             changeBtn: null
         }
-        if (table.rows.length < orders.length) {
+        if (table.rows.length < list.length) {
             appendData(table, obj, data)
         }
-        else if(table.rows.length > 0){
-            for(const i in table.rows)
+        else if (table.rows.length > 0) {
+            for (const i in table.rows)
                 table.deleteRow(i)
-                
+
             appendData(table, obj, data)
         }
     }
@@ -48,8 +61,8 @@ function updateOrderDetail(orderDetail, products) {
     }
 }
 
-function showOrderDetail(orderDetail) {
-    updateOrderDetail(orders.orderDetail, orders.list)
+function showOrderDetail(orderDetail, list) {
+    updateOrderDetail(orderDetail, list)
 
     const component = {
         itemQuantity: document.getElementById("item-quantity"),
@@ -61,37 +74,18 @@ function showOrderDetail(orderDetail) {
         component[i].innerHTML = orderDetail[i]
 }
 
-refreshTable(cartTable, orders.list)
-
-showOrderDetail(orders.orderDetail)
-
-setEvenListenerToDeleteBtns()
-
-document.getElementById("delete-all").onclick = clearCart
-
-function updateTable(table, data) {
-    for (const element of table.rows) {
-        let row = element
-        for (const element of row.cells) {
-            let cell = element
-            console.log(cell.innerHTML)
-        }
-    }
+function clearCart(list) {
+    console.log(list)
 }
 
-function clearCart() {
-    console.log(orders.list)
-}
-
-function setEvenListenerToDeleteBtns() {
-    for (let i = 1; i <= cartTable.rows.length; i++) {
+function setEvenListenerToDeleteBtns(table, list) {
+    for (let i = 1; i <= table.rows.length; i++) {
         const btn = document.getElementById("deleteBtn" + i)
 
         btn.onclick = () => {
-            for (const j in orders.list) {
-                if (orders.list[j].id == i){
-                    console.log(orders.list[j])
-                }
+            for (const j in list) {
+                if (list[j].id == i) 
+                    console.log(list[j])
             }
         }
     }
