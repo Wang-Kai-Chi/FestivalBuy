@@ -2,29 +2,46 @@ const ids = [
     "#product-name",
     "#product-price",
     "#product-descripion",
+    "#product-img",
     "#product-quantity"
 ]
-let value = document.querySelector(ids[3]).value
-
-document.querySelector(ids[3]).onchange = ()=>{
-    saveStorage()
-    console.log(product)
-}
-
 const product = {
-    "name": document.querySelector(ids[0]).innerHTML,
-    "price": parsePrice(ids[1]),
-    "description": document.querySelector(ids[2]).innerHTML,
-    "quantity": value
+    "product_id": null,
+    "title": null,
+    "price": null,
+    "category_id": null,
+    "imageurl": null,
+    "description": null,
+    "is_stock": null
 }
+const dollar = "$"
 
 document.querySelector("#add-to-cart").onclick = () => {
-    saveStorage()
+    saveStorage(product)
     console.log(loadStorage())
 }
 
-function saveStorage(){
-    localStorage.setItem("product", JSON.stringify(product))
+window.onload = ()=>{
+    fetch("/api/products/2")
+            .then(data => data.json())
+            .then(value => addData(value))
+}
+
+function addData(value){
+    for(const i in product){
+        product[i] = value[i]
+    }
+
+    document.querySelector(ids[0]).innerHTML = product.title
+    document.querySelector(ids[1]).innerHTML = dollar+product.price
+    document.querySelector(ids[2]).innerHTML = product.description
+
+    document.querySelector(ids[3]).src = product.imageurl
+    document.querySelector(ids[4]).value = 0
+}
+
+function saveStorage(data){
+    localStorage.setItem("product", JSON.stringify(data))
 }
 
 function loadStorage(){
@@ -35,3 +52,4 @@ function loadStorage(){
 function parsePrice(id) {
     return document.querySelector(id).innerHTML.substring(1)
 }
+

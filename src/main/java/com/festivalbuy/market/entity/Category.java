@@ -1,4 +1,4 @@
-package com.festivalbuy.market;
+package com.festivalbuy.market.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

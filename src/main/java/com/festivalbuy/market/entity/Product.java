@@ -1,7 +1,10 @@
-package com.festivalbuy.market;
+package com.festivalbuy.market.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Product {
@@ -10,7 +13,11 @@ public class Product {
 
 	private String title;
 	private Integer price;
-	private Integer category_id;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "category_id")
+	private Category category;
+	
 	private String imageurl;
 	private String description;
 	private Integer is_stock;
@@ -39,12 +46,12 @@ public class Product {
 		this.price = price;
 	}
 
-	public Integer getCategory_id() {
-		return category_id;
+	public Category getCategory() {
+		return category;
 	}
 
-	public void setCategory_id(Integer category_id) {
-		this.category_id = category_id;
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	public String getImageurl() {
@@ -73,9 +80,8 @@ public class Product {
 
 	@Override
 	public String toString() {
-		return "Product [product_id=" + product_id + ", title=" + title + ", price=" + price + ", category_id="
-				+ category_id + ", imageurl=" + imageurl + ", description=" + description + ", is_stock=" + is_stock
-				+ "]";
+		return "Product [product_id=" + product_id + ", title=" + title + ", price=" + price + ", category=" + category
+				+ ", imageurl=" + imageurl + ", description=" + description + ", is_stock=" + is_stock + "]";
 	}
 
 }

@@ -4,6 +4,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.festivalbuy.market.entity.Category;
+import com.festivalbuy.market.repo.CategoryRepository;
+
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
