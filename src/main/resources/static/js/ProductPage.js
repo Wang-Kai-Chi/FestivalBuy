@@ -26,6 +26,7 @@ window.onload = ()=>{
     fetch(url)
             .then(data => data.json())
             .then(value => showData(value))
+    console.log(document.cookie)
 }
 
 function showData(value){
