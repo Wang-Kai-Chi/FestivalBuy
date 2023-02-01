@@ -1,4 +1,4 @@
-package com.festivalbuy.market;
+package com.festivalbuy.market.controller;
 
 import java.util.Optional;
 

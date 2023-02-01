@@ -1,34 +1,21 @@
 package com.festivalbuy.market.entity;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
 
+@Entity
 public class OrderDetail {
-	@Id
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "order_id")
-	private ProductOrder productOrder;
-	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "product_id")
-	private Product product;
+	@EmbeddedId
+	private OrderDetailKey orderDetailKey;
 	
 	private Integer quantity;
 	private Float subtotal;
 	
-	public ProductOrder getProductOrder() {
-		return productOrder;
+	public OrderDetailKey getOrderDetailKey() {
+		return orderDetailKey;
 	}
-	public void setProductOrder(ProductOrder productOrder) {
-		this.productOrder = productOrder;
-	}
-	public Product getProduct() {
-		return product;
-	}
-	public void setProduct(Product product) {
-		this.product = product;
+	public void setOrderDetailKey(OrderDetailKey orderDetailKey) {
+		this.orderDetailKey = orderDetailKey;
 	}
 	public Integer getQuantity() {
 		return quantity;
@@ -42,6 +29,4 @@ public class OrderDetail {
 	public void setSubtotal(Float subtotal) {
 		this.subtotal = subtotal;
 	}
-	
-	
 }

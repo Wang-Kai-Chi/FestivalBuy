@@ -1,4 +1,4 @@
-package com.festivalbuy.market;
+package com.festivalbuy.market.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
