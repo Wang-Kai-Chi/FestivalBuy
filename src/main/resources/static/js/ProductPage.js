@@ -22,12 +22,13 @@ document.querySelector("#add-to-cart").onclick = () => {
 }
 
 window.onload = ()=>{
-    fetch("/api/products/2")
+    let url = "/api/products/2"
+    fetch(url)
             .then(data => data.json())
-            .then(value => addData(value))
+            .then(value => showData(value))
 }
 
-function addData(value){
+function showData(value){
     for(const i in product){
         product[i] = value[i]
     }
