@@ -3,35 +3,40 @@ package com.festivalbuy.market.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Embeddable
 public class OrderDetailKey implements Serializable{
-	@Column(name = "order_id")
-	private Integer order_id;
-	@Column(name = "product_id")
-	private Integer product_id;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "order_id")
+	private ProductOrder productOrder;
 	
-	public Integer getOrder_id() {
-		return order_id;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "product_id")
+	private Product product;
+
+	public ProductOrder getProductOrder() {
+		return productOrder;
 	}
 
-	public void setOrder_id(Integer order_id) {
-		this.order_id = order_id;
+	public void setProductOrder(ProductOrder productOrder) {
+		this.productOrder = productOrder;
 	}
 
-	public Integer getProduct_id() {
-		return product_id;
+	public Product getProduct() {
+		return product;
 	}
 
-	public void setProduct_id(Integer product_id) {
-		this.product_id = product_id;
+	public void setProduct(Product product) {
+		this.product = product;
 	}
-
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(order_id, product_id);
+		return Objects.hash(productOrder, product);
 	}
 
 	@Override
@@ -43,9 +48,8 @@ public class OrderDetailKey implements Serializable{
 		
 		OrderDetailKey key = (OrderDetailKey) obj;
 		
-		return order_id.equals(key.order_id)&&
-				product_id.equals(key.product_id);
+		return productOrder.equals(key.productOrder)&&
+				product.equals(key.product);
 	}
-	
-	
+
 }
