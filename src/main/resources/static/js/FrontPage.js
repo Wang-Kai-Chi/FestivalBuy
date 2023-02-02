@@ -13,30 +13,41 @@ function main() {
     }
 }
 
-function showData(value) {
+const showData = value => {
     products.push(value[1], value[2], value[3])
 
     for (const i in products) {
         let product = products[i]
-        let hotProduct = `<div class="col">
-        <div class="card" style="width: 18rem;">
-            <img src="${product.imageurl}" class="card-img-top" alt="...">
-            <div class="card-body">
-            <h5 class="card-title">${product.title}</h5>
-            <p class="card-text">${dollar + product.price}</p>
-            <a href="/product_page" class="${'gobtn-' + i} btn btn-primary">購買</a>
-            </div>
-        </div>
-        </div>`
+        const temp = {
+            imageurl: product.imageurl,
+            title: product.title,
+            price: dollar + product.price,
+            id: 'gobtn-' + i
+        }
+        let hotProduct = getCard(temp)
+
         document.querySelector("#hot-product").innerHTML += hotProduct
     }
 
     setBtnListener()
 }
 
-function setBtnListener() {
-    for(const i in products){
-        document.querySelector(".gobtn-"+i).onclick = () => {
+const getCard = temp => {
+    return `<div class="col">
+    <div class="card" style="width: 18rem;">
+        <img src="${temp.imageurl}" class="card-img-top" alt="...">
+        <div class="card-body">
+        <h5 class="card-title">${temp.title}</h5>
+        <p class="card-text">${temp.price}</p>
+        <a href="/product_page" class="${temp.id} btn btn-primary">購買</a>
+        </div>
+    </div>
+    </div>`
+}
+
+const setBtnListener = () => {
+    for (const i in products) {
+        document.querySelector(".gobtn-" + i).onclick = () => {
             let product = products[i]
             document.cookie = `current_product=${product.product_id}`
         }

@@ -1,3 +1,5 @@
+import * as cookie from "./ParseCookie.js"
+
 const ids = [
     "#product-name",
     "#product-price",
@@ -16,32 +18,27 @@ const product = {
 }
 const dollar = "$"
 
-document.querySelector("#add-to-cart").onclick = () => {
-    saveStorage(product)
-    console.log(loadStorage())
+main()
+
+function main() {
+    document.querySelector("#add-to-cart").onclick = () => {
+        saveStorage(product)
+        console.log(loadStorage())
+    }
+
+    window.onload = () => {
+        const cookieObj = cookie.parseCookie(document.cookie)
+
+        console.log(cookieObj)
+
+        let url = "/api/products/" + cookieObj.current_product
+        fetch(url)
+            .then(data => data.json())
+            .then(value => showData(value))
+    }
 }
 
-window.onload = () => {
-    const cookieObj = parseCookie(document.cookie)
-
-    console.log(cookieObj)
-
-    let url = "/api/products/"+cookieObj.current_product
-    fetch(url)
-        .then(data => data.json())
-        .then(value => showData(value))
-}
-
-const parseCookie =
-    str => str
-        .split(';')
-        .map(v => v.split('='))
-        .reduce((acc, v) => {
-            acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
-            return acc;
-        }, {});
-
-function showData(value) {
+const showData = value => {
     for (const i in product) {
         product[i] = value[i]
     }
@@ -54,16 +51,16 @@ function showData(value) {
     document.querySelector(ids[4]).value = 0
 }
 
-function saveStorage(data) {
+const saveStorage = data => {
     localStorage.setItem("product", JSON.stringify(data))
 }
 
-function loadStorage() {
+const loadStorage = () => {
     let product = localStorage.getItem("product")
     return JSON.parse(product)
 }
 
-function parsePrice(id) {
+const parsePrice = id => {
     return document.querySelector(id).innerHTML.substring(1)
 }
 
