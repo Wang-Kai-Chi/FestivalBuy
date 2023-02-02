@@ -1,35 +1,36 @@
-const dollar = "$"
-const products = []
+import * as sc from "./StringCollection.js"
 
 main()
 
 function main() {
+    const products = []
+    
     window.onload = () => {
-        let url = "/api/products"
+        const url = "/api/products"
         fetch(url)
             .then(data => data.json())
-            .then(value => showData(value))
+            .then(value => showData(value, products))
             .catch((err) => console.log(err))
     }
 }
 
-const showData = value => {
+const showData = (value, products) => {
     products.push(value[1], value[2], value[3])
 
     for (const i in products) {
-        let product = products[i]
+        const product = products[i]
         const temp = {
             imageurl: product.imageurl,
             title: product.title,
-            price: dollar + product.price,
-            id: 'gobtn-' + i
+            price: sc.dollar + product.price,
+            id: sc.btnPrefix + i
         }
-        let hotProduct = getCard(temp)
+        const hotProduct = getCard(temp)
 
         document.querySelector("#hot-product").innerHTML += hotProduct
     }
 
-    setBtnListener()
+    setBtnListener(products)
 }
 
 const getCard = temp => {
@@ -45,11 +46,11 @@ const getCard = temp => {
     </div>`
 }
 
-const setBtnListener = () => {
+const setBtnListener = products => {
     for (const i in products) {
-        document.querySelector(".gobtn-" + i).onclick = () => {
-            let product = products[i]
-            document.cookie = `current_product=${product.product_id}`
+        document.querySelector("."+ sc.btnPrefix + i).onclick = () => {
+            const product = products[i]
+            document.cookie = sc.cookieName+'='+product.product_id
         }
     }
 }
