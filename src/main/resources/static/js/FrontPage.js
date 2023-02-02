@@ -9,7 +9,7 @@ function main() {
         fetch(url)
             .then(data => data.json())
             .then(value => showData(value))
-            .catch(() => console.log("fetch fail"))
+            .catch((err) => console.log(err))
     }
 }
 
@@ -24,7 +24,7 @@ function showData(value) {
             <div class="card-body">
             <h5 class="card-title">${product.title}</h5>
             <p class="card-text">${dollar + product.price}</p>
-            <a class="${'gobtn-' + i} btn btn-primary">購買</a>
+            <a href="/product_page" class="${'gobtn-' + i} btn btn-primary">購買</a>
             </div>
         </div>
         </div>`
@@ -35,13 +35,10 @@ function showData(value) {
 }
 
 function setBtnListener() {
-    document.querySelector(".gobtn-0").onclick = () => {
-        console.log("click")
-    }
-    document.querySelector(".gobtn-1").onclick = () => {
-        console.log("click")
-    }
-    document.querySelector(".gobtn-2").onclick = () => {
-        console.log("click")
+    for(const i in products){
+        document.querySelector(".gobtn-"+i).onclick = () => {
+            let product = products[i]
+            document.cookie = `current_product=${product.product_id}`
+        }
     }
 }
