@@ -35,4 +35,12 @@ public class PageController {
 	String product_page(){
 		return "product_page";
 	}
+	@RequestMapping("/logintest")
+	String logintest() {
+		return "logintest";
+	}
+	@RequestMapping("/registertest")
+	String registertest() {
+		return "registertest";
+	}
 }
