@@ -1,3 +1,4 @@
+//parse cookie then return as a Object
 export const parseCookie =
     str => str
         .split(';')
