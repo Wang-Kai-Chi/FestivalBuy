@@ -1,52 +1,30 @@
-import * as orders from "./Data.js"
+import * as sc from "./StringCollection.js"
+import * as te from "./StorageTemp.js"
+import * as lsProcessor from "./LocalStorageProcessor.js"
+
+const elementIds = sc.ShoppingCartIds
+const temp = te.temp
+let totalMoney = 0
 
 main()
 
 function main() {
-    const cartTable = document.getElementById("cart-body")
-    const list = initOrderList()
+    const storage = lsProcessor.load(sc.ordersKey)
 
-    refreshTable(cartTable, list)
-
-    showOrderDetail(orders.orderDetail, list)
-    
-    setEvenListenerToDeleteBtns(cartTable, list)
-
-    document.getElementById("delete-all").onclick = () => clearCart(cartTable,list)
-}
-
-function initOrderList(){
-    const list = []
-
-    saveStorage()
-    
-    let cartData = loadStorage()
-    
-    for(const i in cartData)
-        list.push(cartData[i])
-
-    return list
-}
-
-function saveStorage(){
-    localStorage.setItem("order", JSON.stringify(orders.products))
-}
-
-function loadStorage(){
-    let order = localStorage.getItem("order")
-    return JSON.parse(order)
+    if (storage != null) {
+        temp.orders = storage
+        
+        const cartTable = document.querySelector(elementIds.cbody)
+        refreshTable(cartTable, temp.orders.list)
+    }
 }
 
 function refreshTable(table, list) {
-    for (let i of list) {
-        let info = i
-        let data = {
-            details: `<img src="${info.pic}" width="120">` + info.name,
-            price: info.price,
-            quantity: info.quantity,
-            inStock: info.inStock,
-            changeBtn: `<button class="btn btn-primary" id="${'deleteBtn' + info.id}">刪除</button>`,
-        }
+    for (let i in list) {
+        const orderDetail = list[i]
+        const product = list[i].product
+
+        let data = getTbody(orderDetail, product)
         const obj = {
             details: null,
             price: null,
@@ -54,16 +32,11 @@ function refreshTable(table, list) {
             inStock: null,
             changeBtn: null
         }
-        if (table.rows.length < list.length) {
-            appendData(table, obj, data)
-        }
-        else if (table.rows.length > 0) {
-            for (const i in table.rows)
-                table.deleteRow(i)
+        appendData(table, obj, data)
 
-            appendData(table, obj, data)
-        }
+        totalMoney += orderDetail.subtotal
     }
+    document.querySelector(elementIds.subtotal).innerHTML = parseInt(totalMoney)
 }
 
 function appendData(table, obj, data) {
@@ -72,50 +45,18 @@ function appendData(table, obj, data) {
     for (let i in obj) {
         obj[i] = row.insertCell()
         obj[i].innerHTML = data[i]
+        console.log(obj[i])
     }
 }
 
-function updateOrderDetail(orderDetail, products) {
-    for (let i of products) {
-        orderDetail.itemQuantity++
-        orderDetail.totalQuantity += parseInt(i.quantity)
-        orderDetail.subTotal += parseInt(i.quantity * i.price)
-    }
-}
-
-function showOrderDetail(orderDetail, list) {
-    updateOrderDetail(orderDetail, list)
-
-    const component = {
-        itemQuantity: document.getElementById("item-quantity"),
-        totalQuantity: document.getElementById("total-quantity"),
-        subTotal: document.getElementById("sub-total")
+function getTbody(orderDetail, product) {
+    let tbody = {
+        details: `<img src="${product.imageurl}" width="120">` + product.title,
+        price: product.price,
+        quantity: orderDetail.quantity,
+        inStock: product.is_stock,
+        changeBtn: `<button class="btn btn-primary" id="${'deleteBtn' + product.product_id}">刪除</button>`,
     }
 
-    for (let i in orderDetail)
-        component[i].innerHTML = orderDetail[i]
-}
-
-function clearCart(table, list) {
-    for(const i in table.rows)
-        table.deleteRow(i)
-
-    localStorage.removeItem("order")
-
-    console.log(list)
-}
-
-function setEvenListenerToDeleteBtns(table, list) {
-    for (let i = 1; i <= table.rows.length; i++) {
-        const btn = document.getElementById("deleteBtn" + i)
-
-        btn.onclick = () => {
-            for (const j in list) {
-                if (list[j].id == i){
-                    list.slice(j)
-                    console.log(list[j])
-                }
-            }
-        }
-    }
+    return tbody
 }

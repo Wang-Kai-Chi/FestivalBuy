@@ -5,14 +5,13 @@ import * as lsProcessor from "./LocalStorageProcessor.js"
 
 const temp = te.temp
 const elementIds = sc.productPageIds
-const ordersKey = "orders"
 
 main()
 
 function main() {
     window.onload = () => {
         const cookieObj = cookieParser.parseCookie(document.cookie)
-        const storage = lsProcessor.load(ordersKey)
+        const storage = lsProcessor.load(sc.ordersKey)
 
         if (storage != null) {
             temp.orders = storage
@@ -85,6 +84,6 @@ const setBuyBtnListener = data => {
         document.querySelector(elementIds.quantity).remove()
         document.querySelector(".qtext").remove()
 
-        lsProcessor.save(ordersKey, data)
+        lsProcessor.save(sc.ordersKey, data)
     }
 }
