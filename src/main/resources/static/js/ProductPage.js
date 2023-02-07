@@ -1,7 +1,7 @@
-import * as cookieParser from "./CookieParser.js"
-import * as sc from "./StringCollection.js"
-import * as te from "./StorageTemp.js"
-import * as lsProcessor from "./LocalStorageProcessor.js"
+import * as cookieParser from "./util/CookieParser.js"
+import * as sc from "./util/StringCollection.js"
+import * as te from "./util/StorageTemp.js"
+import * as lsProcessor from "./util/LocalStorageProcessor.js"
 
 const temp = te.temp
 const elementIds = sc.productPageIds

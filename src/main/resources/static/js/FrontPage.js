@@ -1,4 +1,4 @@
-import * as sc from "./StringCollection.js"
+import * as sc from "./util/StringCollection.js"
 
 main()
 
