@@ -4,7 +4,7 @@ export const btnPrefix = "gobtn-"
 
 export const cookieName = "current_product"
 
-export const ordersKey = "orders"
+export const cartKey = "cart"
 
 export const productPageIds = {
     name: "#pname",

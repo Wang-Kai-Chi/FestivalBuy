@@ -1,15 +1,23 @@
 import * as te from "./util/StorageTemp.js"
+import * as lsProcessor from "./util/LocalStorageProcessor.js"
+import * as sc from "./util/StringCollection.js"
 
 const temp = te.temp
-
+let storage
 main()
 
 function main() {
-    const form = document.querySelector("form")
+    storage = lsProcessor.load(sc.cartKey)
 
-    console.log(form)
+    if (storage != null) {
+        temp.cart = storage
 
-    form.addEventListener("submit", handleSubmit)
+        const form = document.querySelector("form")
+    
+        console.log(form)
+    
+        form.addEventListener("submit", handleSubmit)
+    }
 }
 
 function handleSubmit(event) {
@@ -26,6 +34,7 @@ function handleSubmit(event) {
 }
 
 function setOrderInfo(obj) {
+    const storage = lsProcessor.load(sc.cartKey)
     const info = temp.info
 
     info.payment_method = getPayment(obj.payment)
@@ -33,6 +42,7 @@ function setOrderInfo(obj) {
     info.recipient_name = obj.username
     info.recipient_phone = obj.phone
 
+    info.order_total = storage.info.order_total
     info.shipping_address = obj.address
     info.status = "處理中"
 }

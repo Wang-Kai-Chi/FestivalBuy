@@ -9,7 +9,7 @@ let totalMoney = 0
 main()
 
 function main() {
-    const storage = lsProcessor.load(sc.ordersKey)
+    const storage = lsProcessor.load(sc.cartKey)
 
     if (storage != null) {
         temp.cart = storage
@@ -37,6 +37,14 @@ function refreshTable(table, list) {
         totalMoney += orderDetail.subtotal
     }
     document.querySelector(elementIds.subtotal).innerHTML = parseInt(totalMoney)
+    saveOrderInfo()
+}
+
+function saveOrderInfo(){
+    temp.info.order_total = parseInt(totalMoney)
+    temp.cart.info = temp.info
+    lsProcessor.save(sc.cartKey, temp.cart)
+    console.log(temp.cart)
 }
 
 function appendData(table, obj, data) {

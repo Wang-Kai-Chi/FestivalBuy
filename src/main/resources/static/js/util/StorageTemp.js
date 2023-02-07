@@ -4,11 +4,6 @@ export const temp = {
         "info": {},
         "list": {}
     },
-    orderDetail: {
-        "product": {},
-        "quantity": 1,
-        "subtotal": 0
-    },
     info: {
         "order_date": "YYYY-MM-DD hh:mm:ss",
         "order_total": 0,

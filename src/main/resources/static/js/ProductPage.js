@@ -11,7 +11,7 @@ main()
 function main() {
     window.onload = () => {
         const cookieObj = cookieParser.parseCookie(document.cookie)
-        const storage = lsProcessor.load(sc.ordersKey)
+        const storage = lsProcessor.load(sc.cartKey)
 
         if (storage != null) {
             temp.cart = storage
@@ -58,9 +58,9 @@ const setOrder = productData => {
         subtotal: quantity * productData.price
     }
 
-    saveOrderDetailToOrders(temp.orders)
+    saveOrderDetailToOrders(temp.cart)
 
-    setBuyBtnListener(temp.orders)
+    setBuyBtnListener(temp.cart)
 }
 
 const saveOrderDetailToOrders = (orders) => {
@@ -84,6 +84,6 @@ const setBuyBtnListener = data => {
         document.querySelector(elementIds.quantity).remove()
         document.querySelector(".qtext").remove()
 
-        lsProcessor.save(sc.ordersKey, data)
+        lsProcessor.save(sc.cartKey, data)
     }
 }
