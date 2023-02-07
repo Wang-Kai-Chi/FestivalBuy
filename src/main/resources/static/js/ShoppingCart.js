@@ -12,10 +12,10 @@ function main() {
     const storage = lsProcessor.load(sc.ordersKey)
 
     if (storage != null) {
-        temp.orders = storage
+        temp.cart = storage
         
         const cartTable = document.querySelector(elementIds.cbody)
-        refreshTable(cartTable, temp.orders.list)
+        refreshTable(cartTable, temp.cart.list)
     }
 }
 
@@ -45,7 +45,6 @@ function appendData(table, obj, data) {
     for (let i in obj) {
         obj[i] = row.insertCell()
         obj[i].innerHTML = data[i]
-        console.log(obj[i])
     }
 }
 

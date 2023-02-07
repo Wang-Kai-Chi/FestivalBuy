@@ -14,7 +14,7 @@ function main() {
         const storage = lsProcessor.load(sc.ordersKey)
 
         if (storage != null) {
-            temp.orders = storage
+            temp.cart = storage
         }
 
         console.log(cookieObj)
