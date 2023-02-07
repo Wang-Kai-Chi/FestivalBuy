@@ -12,19 +12,19 @@ import com.festivalbuy.market.repo.CustomerRepository;
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
-	private CustomerRepository repository;
+	private CustomerRepository customerRepository;
 	
 	public CustomerController(CustomerRepository customerRepository) {
-		this.repository = customerRepository;
+		this.customerRepository = customerRepository;
 	}
 	
 	@GetMapping
 	Iterable<Customer> getCustomers() {
-		return  repository.findAll();
+		return  customerRepository.findAll();
 	}
 	
 	@PostMapping
 	Customer addCustomer(@RequestBody Customer customer) {
-		return repository.save(customer);
+		return customerRepository.save(customer);
 	}
 }
