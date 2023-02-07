@@ -13,7 +13,7 @@
 
 <body>
     <div class="payCheckout container text-left w-75 px-5 py-4 bg-light">
-        <form action="">
+        <form target="_blank" action="" method="post">
             <fieldset>
                 <legend>選擇付款方式</legend>
                 <div class="mb-3">
@@ -53,7 +53,8 @@
             </fieldset>
             <fieldset id="confirm">
                 <div class="form-check text-end">
-                    <input type="submit" class="btn btn-primary form-check" value="確認結帳" />
+                    <input type="submit" class="btn btn-primary form-check" 
+                    value="確認結帳" onclick="window.location.href='./checkout_finished'"/>
                 </div>
             </fieldset>
         </form>

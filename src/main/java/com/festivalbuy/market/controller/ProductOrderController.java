@@ -34,7 +34,7 @@ public class ProductOrderController {
 	ProductOrder addOrder(@RequestBody ProductOrder productOrder) {
 		Customer customer = productOrder.getCustomer();
 		
-		productOrder.setCustomer(getNewCustomer(customer));
+		productOrder.setCustomer(getCustomerIfExist(customer));
 		productOrder.setOrder_id(getNewOrderId(productOrder));
 
 		return productOrderRepo.save(productOrder);
@@ -48,9 +48,9 @@ public class ProductOrderController {
 		return (id <= orderSize) ? ++orderSize : id;
 	}
 	
-	private Customer getNewCustomer(Customer customer) {
+	private Customer getCustomerIfExist(Customer customer) {
 		Optional<Customer> temp = customerRepo.findById(customer.getCustomer_id());
 		
-		return (temp.isPresent())?temp.get():null;
+		return (temp.isPresent())?temp.get():customer;
 	}
 }
