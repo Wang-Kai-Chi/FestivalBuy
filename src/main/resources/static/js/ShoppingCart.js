@@ -13,9 +13,17 @@ function main() {
 
     if (storage != null) {
         temp.cart = storage
-        
+
         const cartTable = document.querySelector(elementIds.cbody)
         refreshTable(cartTable, temp.cart.list)
+        setDeleteAllBtnListener()
+    }
+}
+
+function setDeleteAllBtnListener() {
+    document.querySelector(sc.ShoppingCartIds.aldelete).onclick = () => {
+        localStorage.removeItem(sc.cartKey)
+        document.location.reload()
     }
 }
 
@@ -40,7 +48,7 @@ function refreshTable(table, list) {
     saveOrderInfo()
 }
 
-function saveOrderInfo(){
+function saveOrderInfo() {
     temp.info.order_total = parseInt(totalMoney)
     temp.cart.info = temp.info
     lsProcessor.save(sc.cartKey, temp.cart)

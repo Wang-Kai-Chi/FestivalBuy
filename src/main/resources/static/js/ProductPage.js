@@ -38,7 +38,6 @@ const parseValue = value => {
 
     document.querySelector(elementIds.quantity).onchange = () => {
         setOrder(value)
-        console.log(temp.cart)
     }
 }
 
@@ -64,9 +63,9 @@ const setOrder = productData => {
     setBuyBtnListener(temp.cart)
 }
 
-const saveOrderDetailToOrders = (orders) => {
+const saveOrderDetailToOrders = cart => {
     let productId = temp.orderDetail.product.product_id
-    orders.list[`${productId}`] = temp.orderDetail
+    cart.list[`${productId}`] = temp.orderDetail
 }
 
 const getProductQuantity = () => {
@@ -81,13 +80,12 @@ const setBuyBtnListener = data => {
 }
 
 function removeBtnAndInput(data){
+    lsProcessor.save(sc.cartKey, data)
     document.querySelector("#buy-place").innerHTML = `<button type="button" 
     class="btn btn-warning btn-lg px-4 me-md-2">已購買</button>`
     
     document.querySelector(elementIds.quantity).remove()
     document.querySelector(".qtext").remove()
     
-    lsProcessor.save(sc.cartKey, data)
-
     document.querySelector("#gobtn-cart").remove()
 }
