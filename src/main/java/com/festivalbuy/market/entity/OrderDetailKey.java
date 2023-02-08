@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 
 @Embeddable
 public class OrderDetailKey implements Serializable{
+	private static final long serialVersionUID = 7472997799726336607L;
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "order_id")
 	private ProductOrder productOrder;

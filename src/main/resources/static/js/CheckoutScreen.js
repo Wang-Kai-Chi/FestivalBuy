@@ -2,10 +2,11 @@ import * as te from "./util/StorageTemp.js"
 import * as lsProcessor from "./util/LocalStorageProcessor.js"
 import * as sc from "./util/StringCollection.js"
 
-const temp = te.temp
+const storageTemp = te.temp
 let storage
+let orderId = 0
 
-const postBody = {
+const productOrderBody = {
     "order_id": 3,
     "customer": {
         "customer_id": 1
@@ -19,13 +20,20 @@ const postBody = {
     "recipient_phone": null
 }
 
+const orderDetailArray = []
+
 main()
 
 function main() {
     storage = lsProcessor.load(sc.cartKey)
 
     if (storage != null) {
-        temp.cart = storage
+        storageTemp.cart = storage
+
+        console.log(storageTemp.cart)
+
+        for (const i in storageTemp.cart.list)
+            console.log(i)
 
         const form = document.querySelector("form")
         form.addEventListener("submit", handleSubmit)
@@ -33,8 +41,6 @@ function main() {
 }
 
 function handleSubmit(event) {
-    //event.preventDefault()
-
     const formData = new FormData(event.target)
     const obj = Object.fromEntries(formData.entries())
 
@@ -45,34 +51,78 @@ function handleSubmit(event) {
 
 function postData() {
     fetch("/api/orders", {
-        method: "POST", 
+        method: "POST",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(postBody)
+        body: JSON.stringify(productOrderBody)
+    })
+        .then(data => data.json())
+        .then(value => {
+            console.log(value)
+            orderId = value.order_id
+            initOrderDetailArry()
+            console.log(orderDetailArray)
+            postOrderDetail()
+            localStorage.removeItem(sc.cartKey)
+        })
+        .catch(err => console.log(err))
+
+    const postOrderDetail = () => fetch("/api/order_details", {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(orderDetailArray)
     })
         .then(data => data.json())
         .then(value => console.log(value))
         .catch(err => console.log(err))
 }
 
+function initOrderDetailArry() {
+    const plist = storageTemp.cart.list
+    for (const i in plist) {
+        let orderDetailBody = {
+            "orderDetailKey": {
+                "productOrder": {
+                    "order_id": 2
+                },
+                "product": {
+                    "product_id": 2
+                }
+            },
+            "quantity": 1,
+            "subtotal": 2999.0
+        }
+
+        orderDetailBody.orderDetailKey.productOrder.order_id = orderId
+        orderDetailBody.orderDetailKey.product.product_id = plist[i].product.product_id
+        orderDetailBody.quantity = plist[i].quantity
+        orderDetailBody.subtotal = plist[i].subtotal
+
+        orderDetailArray.push(orderDetailBody)
+    }
+}
+
 function setOrderInfo(obj) {
     const storage = lsProcessor.load(sc.cartKey)
 
-    postBody.payment_method = getPayment(obj.payment)
-    postBody.order_date = getFullDateString()
-    postBody.recipient_name = obj.username
-    postBody.recipient_phone = obj.phone
+    productOrderBody.payment_method = getPayment(obj.payment)
+    productOrderBody.order_date = getFullDateString()
+    productOrderBody.recipient_name = obj.username
+    productOrderBody.recipient_phone = obj.phone
 
-    postBody.order_total = storage.info.order_total
-    postBody.shipping_address = obj.address
-    postBody.status = "處理中"
+    productOrderBody.order_total = storage.info.order_total
+    productOrderBody.shipping_address = obj.address
+    productOrderBody.status = "處理中"
 
-    postBody.order_id = 0
-    postBody.customer.customer_id = 1
+    productOrderBody.order_id = orderId
+    productOrderBody.customer.customer_id = 1
 
-    console.log(postBody)
+    console.log(productOrderBody)
 }
 
 function getPayment(value) {

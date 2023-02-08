@@ -13,7 +13,6 @@ import com.festivalbuy.market.entity.OrderDetail;
 import com.festivalbuy.market.entity.OrderDetailKey;
 import com.festivalbuy.market.entity.Product;
 import com.festivalbuy.market.entity.ProductOrder;
-import com.festivalbuy.market.repo.CustomerRepository;
 import com.festivalbuy.market.repo.OrderDetailRepository;
 import com.festivalbuy.market.repo.ProductOrderRepository;
 import com.festivalbuy.market.repo.ProductRepository;

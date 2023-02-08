@@ -38,6 +38,7 @@ const parseValue = value => {
 
     document.querySelector(elementIds.quantity).onchange = () => {
         setOrder(value)
+        console.log(temp.cart)
     }
 }
 
