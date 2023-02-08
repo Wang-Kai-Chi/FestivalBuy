@@ -76,14 +76,17 @@ const getProductQuantity = () => {
 
 const setBuyBtnListener = data => {
     const btn = document.querySelector(elementIds.btn)
-    btn.onclick = () => {
-        btn.classList.toggle('btn-warning')
+    btn.onclick = ()=>removeBtnAndInput(data)
+}
 
-        btn.innerHTML = "已購買"
+function removeBtnAndInput(data){
+    document.querySelector("#buy-place").innerHTML = `<button type="button" 
+    class="btn btn-warning btn-lg px-4 me-md-2">已購買</button>`
+    
+    document.querySelector(elementIds.quantity).remove()
+    document.querySelector(".qtext").remove()
+    
+    lsProcessor.save(sc.cartKey, data)
 
-        document.querySelector(elementIds.quantity).remove()
-        document.querySelector(".qtext").remove()
-
-        lsProcessor.save(sc.cartKey, data)
-    }
+    document.querySelector("#gobtn-cart").remove()
 }
