@@ -59,17 +59,22 @@ function postData() {
         body: JSON.stringify(productOrderBody)
     })
         .then(data => data.json())
-        .then(value => {
-            console.log(value)
-            orderId = value.order_id
-            initOrderDetailArry()
-            console.log(orderDetailArray)
-            postOrderDetail()
-            localStorage.removeItem(sc.cartKey)
-        })
+        .then(jsonData => processOrders(jsonData))
         .catch(err => console.log(err))
+}
 
-    const postOrderDetail = () => fetch("/api/order_details", {
+function processOrders(jsonData) {
+    orderId = jsonData.order_id
+
+    initOrderDetailArry()
+
+    postOrderDetail()
+
+    localStorage.removeItem(sc.cartKey)
+}
+
+function postOrderDetail() {
+    fetch("/api/order_details", {
         method: "POST",
         headers: {
             'Accept': 'application/json',
@@ -78,7 +83,10 @@ function postData() {
         body: JSON.stringify(orderDetailArray)
     })
         .then(data => data.json())
-        .then(value => console.log(value))
+        .then(value => {
+            console.log(value)
+            window.location.href='./checkout_finished'
+        })
         .catch(err => console.log(err))
 }
 
