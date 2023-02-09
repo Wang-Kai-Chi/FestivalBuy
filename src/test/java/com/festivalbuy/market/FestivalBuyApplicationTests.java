@@ -16,8 +16,8 @@ class FestivalBuyApplicationTests {
 	}
 	
 	@Test
-	void testGetOrdersWithSameCustomer() {
-		System.out.println(orderDetailController.getOrdersWithSameCustomer(2));
+	void printData() {
+		System.out.println(orderDetailController.getOrderDetailsWithSameCustomer(1));
 	}
 
 }

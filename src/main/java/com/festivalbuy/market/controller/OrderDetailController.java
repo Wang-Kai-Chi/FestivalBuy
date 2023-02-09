@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.festivalbuy.market.ProductService;
 import com.festivalbuy.market.entity.OrderDetail;
 import com.festivalbuy.market.entity.OrderDetailKey;
 import com.festivalbuy.market.entity.Product;
@@ -28,28 +29,38 @@ public class OrderDetailController {
 	private ProductRepository productRepo;
 	@Autowired
 	private ProductOrderRepository productOrderRepo;
+	String prefix = "/imgs/";
 
 	@GetMapping
 	Iterable<OrderDetail> getOrderDetails() {
-		return orderDetailRepo.findAll();
+		ArrayList<OrderDetail> orderDetails = (ArrayList<OrderDetail>) orderDetailRepo.findAll();
+		
+		for(OrderDetail o: orderDetails) {
+			Product p =o.getOrderDetailKey().getProduct();
+			p.setImageurl(prefix+p.getImageurl());
+		}
+		
+		return orderDetails;
 	}
 
 	@GetMapping("/customer/{customerId}")
 	ArrayList<OrderDetail> getOrderDetailByCustomerId(@PathVariable Integer customerId) {
 
-		return getOrderDetailWithSameCustomer(customerId);
+		return getOrderDetailsWithSameCustomer(customerId);
 	}
 
-	ArrayList<OrderDetail> getOrderDetailWithSameCustomer(Integer customerId) {
+	public ArrayList<OrderDetail> getOrderDetailsWithSameCustomer(Integer customerId) {
 		ArrayList<ProductOrder> orderList = getOrdersWithSameCustomer(customerId);
 
-		ArrayList<OrderDetail> detailList = (ArrayList<OrderDetail>) orderDetailRepo.findAll();
+		ArrayList<OrderDetail> detailList = (ArrayList<OrderDetail>) getOrderDetails();
 		ArrayList<OrderDetail> temp = new ArrayList<>();
 
 		for (ProductOrder p : orderList) {
 			for (OrderDetail o : detailList) {
-				if (p == o.getOrderDetailKey().getProductOrder())
+				OrderDetailKey ok = o.getOrderDetailKey();
+				if (p == ok.getProductOrder()) {
 					temp.add(o);
+				}
 			}
 		}
 		return temp;
@@ -103,7 +114,7 @@ public class OrderDetailController {
 		return (po.isPresent()) ? po.get() : null;
 
 	}
-
+	
 	private Product getProductWithKey(Integer id) {
 		Optional<Product> p = productRepo.findById(id);
 		return (p.isPresent()) ? p.get() : null;

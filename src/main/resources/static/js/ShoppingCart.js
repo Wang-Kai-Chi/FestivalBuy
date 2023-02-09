@@ -53,7 +53,7 @@ function refreshTable(table, list) {
 
 function appendDataToTable(table, data) {
     const row = table.insertRow()
-    const cells = tableDataMap()
+    const cells = cartDataMap()
 
     for (let i in cells) {
         cells[i] = row.insertCell()
@@ -62,7 +62,7 @@ function appendDataToTable(table, data) {
 }
 
 function getTbody(orderDetail, product) {
-    let tbody = tableDataMap()
+    let tbody = cartDataMap()
 
     tbody.details = `<img src="${product.imageurl}" width="120">` + product.title
     tbody.price = product.price
@@ -73,7 +73,7 @@ function getTbody(orderDetail, product) {
     return tbody
 }
 
-function tableDataMap() {
+function cartDataMap() {
     return {
         details: null,
         price: null,

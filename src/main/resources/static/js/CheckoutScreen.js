@@ -30,11 +30,6 @@ function main() {
     if (storage != null) {
         storageTemp.cart = storage
 
-        console.log(storageTemp.cart)
-
-        for (const i in storageTemp.cart.list)
-            console.log(i)
-
         const form = document.querySelector("form")
         form.addEventListener("submit", handleSubmit)
     }
@@ -49,9 +44,26 @@ function handleSubmit(event) {
     postData()
 }
 
+function setOrderInfo(obj) {
+    const storage = lsProcessor.load(sc.cartKey)
+
+    productOrderBody.payment_method = getPayment(obj.payment)
+    productOrderBody.order_date = getFullDateString()
+    productOrderBody.recipient_name = obj.username
+    productOrderBody.recipient_phone = obj.phone
+
+    productOrderBody.order_total = storage.info.order_total
+    productOrderBody.shipping_address = obj.address
+    productOrderBody.status = "處理中"
+
+    productOrderBody.order_id = orderId
+    productOrderBody.customer.customer_id = 1
+
+}
+
 function postData() {
     fetch("/api/orders", {
-        method: "POST",
+        method: "post",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -75,7 +87,7 @@ function processOrders(jsonData) {
 
 function postOrderDetail() {
     fetch("/api/order_details", {
-        method: "POST",
+        method: "post",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -83,8 +95,7 @@ function postOrderDetail() {
         body: JSON.stringify(orderDetailArray)
     })
         .then(data => data.json())
-        .then(value => {
-            console.log(value)
+        .then(() => {
             window.location.href='./checkout_finished'
         })
         .catch(err => console.log(err))
@@ -96,14 +107,14 @@ function initOrderDetailArry() {
         let orderDetailBody = {
             "orderDetailKey": {
                 "productOrder": {
-                    "order_id": 2
+                    "order_id": 1
                 },
                 "product": {
-                    "product_id": 2
+                    "product_id": 1
                 }
             },
             "quantity": 1,
-            "subtotal": 2999.0
+            "subtotal": 0.0
         }
 
         orderDetailBody.orderDetailKey.productOrder.order_id = orderId
@@ -113,24 +124,6 @@ function initOrderDetailArry() {
 
         orderDetailArray.push(orderDetailBody)
     }
-}
-
-function setOrderInfo(obj) {
-    const storage = lsProcessor.load(sc.cartKey)
-
-    productOrderBody.payment_method = getPayment(obj.payment)
-    productOrderBody.order_date = getFullDateString()
-    productOrderBody.recipient_name = obj.username
-    productOrderBody.recipient_phone = obj.phone
-
-    productOrderBody.order_total = storage.info.order_total
-    productOrderBody.shipping_address = obj.address
-    productOrderBody.status = "處理中"
-
-    productOrderBody.order_id = orderId
-    productOrderBody.customer.customer_id = 1
-
-    console.log(productOrderBody)
 }
 
 function getPayment(value) {
