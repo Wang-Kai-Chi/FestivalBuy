@@ -43,4 +43,9 @@ public class PageController {
 	String registertest() {
 		return "registertest";
 	}
+	
+	@RequestMapping("/memberV2")
+	String memberV2() {
+		return "memberV2";
+	}
 }
