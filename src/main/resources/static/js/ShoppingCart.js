@@ -16,6 +16,11 @@ function main() {
 
         const cartTable = document.querySelector(elementIds.cbody)
         refreshTable(cartTable, temp.cart.list)
+
+        document.querySelector(elementIds.subtotal).innerHTML = parseInt(totalMoney)
+        
+        saveOrderInfo()
+
         setDeleteAllBtnListener()
     }
 }
@@ -27,27 +32,6 @@ function setDeleteAllBtnListener() {
     }
 }
 
-function refreshTable(table, list) {
-    for (let i in list) {
-        const orderDetail = list[i]
-        const product = list[i].product
-
-        let data = getTbody(orderDetail, product)
-        const obj = {
-            details: null,
-            price: null,
-            quantity: null,
-            inStock: null,
-            changeBtn: null
-        }
-        appendData(table, obj, data)
-
-        totalMoney += orderDetail.subtotal
-    }
-    document.querySelector(elementIds.subtotal).innerHTML = parseInt(totalMoney)
-    saveOrderInfo()
-}
-
 function saveOrderInfo() {
     temp.info.order_total = parseInt(totalMoney)
     temp.cart.info = temp.info
@@ -55,23 +39,46 @@ function saveOrderInfo() {
     console.log(temp.cart)
 }
 
-function appendData(table, obj, data) {
-    const row = table.insertRow()
+function refreshTable(table, list) {
+    for (let i in list) {
+        const orderDetail = list[i]
 
-    for (let i in obj) {
-        obj[i] = row.insertCell()
-        obj[i].innerHTML = data[i]
+        const data = getTbody(orderDetail, orderDetail.product)
+        appendDataToTable(table, data)
+
+        totalMoney += orderDetail.subtotal
+    }
+
+}
+
+function appendDataToTable(table, data) {
+    const row = table.insertRow()
+    const cells = tableDataMap()
+
+    for (let i in cells) {
+        cells[i] = row.insertCell()
+        cells[i].innerHTML = data[i]
     }
 }
 
 function getTbody(orderDetail, product) {
-    let tbody = {
-        details: `<img src="${product.imageurl}" width="120">` + product.title,
-        price: product.price,
-        quantity: orderDetail.quantity,
-        inStock: product.is_stock,
-        changeBtn: `<button class="btn btn-primary" id="${'deleteBtn' + product.product_id}">刪除</button>`,
-    }
+    let tbody = tableDataMap()
+
+    tbody.details = `<img src="${product.imageurl}" width="120">` + product.title
+    tbody.price = product.price
+    tbody.quantity = orderDetail.quantity
+    tbody.inStock = product.is_stock
+    tbody.changeBtn = `<button class="btn btn-primary" id="${'deleteBtn' + product.product_id}">刪除</button>`
 
     return tbody
+}
+
+function tableDataMap() {
+    return {
+        details: null,
+        price: null,
+        quantity: null,
+        inStock: null,
+        changeBtn: null
+    }
 }

@@ -4,14 +4,13 @@ main()
 
 function main() {
     const products = []
-    
-    window.onload = () => {
-        const url = "/api/products"
-        fetch(url)
-            .then(data => data.json())
-            .then(value => showData(value, products))
-            .catch((err) => console.log(err))
-    }
+
+    const url = "/api/products"
+    fetch(url)
+        .then(data => data.json())
+        .then(value => showData(value, products))
+        .catch((err) => console.log(err))
+
 }
 
 const showData = (value, products) => {
@@ -48,9 +47,9 @@ const getCard = temp => {
 
 const setBtnListener = products => {
     for (const i in products) {
-        document.querySelector("."+ sc.btnPrefix + i).onclick = () => {
+        document.querySelector("." + sc.btnPrefix + i).onclick = () => {
             const product = products[i]
-            document.cookie = sc.cookieName+'='+product.product_id
+            document.cookie = sc.cookieName + '=' + product.product_id
         }
     }
 }
