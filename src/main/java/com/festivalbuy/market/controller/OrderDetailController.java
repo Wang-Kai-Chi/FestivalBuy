@@ -18,7 +18,6 @@ import com.festivalbuy.market.entity.Product;
 import com.festivalbuy.market.entity.ProductOrder;
 import com.festivalbuy.market.repo.OrderDetailRepository;
 import com.festivalbuy.market.repo.ProductOrderRepository;
-import com.festivalbuy.market.repo.ProductRepository;
 
 @RestController
 @RequestMapping("/api/order_details")
@@ -26,18 +25,17 @@ public class OrderDetailController {
 	@Autowired
 	private OrderDetailRepository orderDetailRepo;
 	@Autowired
-	private ProductRepository productRepo;
+	private ProductService productService;
 	@Autowired
 	private ProductOrderRepository productOrderRepo;
-	String prefix = "/imgs/";
 
 	@GetMapping
 	Iterable<OrderDetail> getOrderDetails() {
-		ArrayList<OrderDetail> orderDetails = (ArrayList<OrderDetail>) orderDetailRepo.findAll();
+		Iterable<OrderDetail> orderDetails = orderDetailRepo.findAll();
 		
 		for(OrderDetail o: orderDetails) {
 			Product p =o.getOrderDetailKey().getProduct();
-			p.setImageurl(prefix+p.getImageurl());
+			p.setImageurl(productService.findProductById(p.getProduct_id()).getImageurl());
 		}
 		
 		return orderDetails;
@@ -86,7 +84,7 @@ public class OrderDetailController {
 		OrderDetailKey orderDetailKey = new OrderDetailKey();
 
 		orderDetailKey.setProductOrder(getOrderWithKey(orderId));
-		orderDetailKey.setProduct(getProductWithKey(productId));
+		orderDetailKey.setProduct(productService.findProductById(productId));
 
 		return orderDetailRepo.findById(orderDetailKey);
 	}
@@ -99,7 +97,7 @@ public class OrderDetailController {
 			OrderDetailKey old = o.getOrderDetailKey();
 			OrderDetailKey key = new OrderDetailKey();
 
-			key.setProduct(getProductWithKey(old.getProduct().getProduct_id()));
+			key.setProduct(productService.findProductById(old.getProduct().getProduct_id()));
 			key.setProductOrder(getOrderWithKey(old.getProductOrder().getOrder_id()));
 
 			o.setOrderDetailKey(key);
@@ -113,10 +111,5 @@ public class OrderDetailController {
 
 		return (po.isPresent()) ? po.get() : null;
 
-	}
-	
-	private Product getProductWithKey(Integer id) {
-		Optional<Product> p = productRepo.findById(id);
-		return (p.isPresent()) ? p.get() : null;
 	}
 }
