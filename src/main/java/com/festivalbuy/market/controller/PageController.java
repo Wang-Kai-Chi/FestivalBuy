@@ -35,9 +35,9 @@ public class PageController {
 	String product_page(){
 		return "product_page";
 	}
-	@RequestMapping("/logintest")
-	String logintest() {
-		return "logintest";
+	@RequestMapping("/login")
+	String login() {
+		return "login";
 	}
 	@RequestMapping("/registertest")
 	String registertest() {
