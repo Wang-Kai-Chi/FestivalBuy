@@ -48,4 +48,9 @@ public class PageController {
 	String memberV2() {
 		return "memberV2";
 	}
+	
+	@RequestMapping("/header")
+	String header() {
+		return "header";
+	}
 }
