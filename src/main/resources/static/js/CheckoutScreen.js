@@ -63,26 +63,21 @@ function setOrderInfo(obj) {
 
 function postData() {
     fetch("/api/orders", {
-        method: "post",
+        method: "POST",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(productOrderBody)
     })
-        .then(data => data.json())
-        .then(jsonData => processOrders(jsonData))
+        .then(response => response.json())
+        .then(jsonData => {
+            console.log(jsonData)
+            orderId = jsonData.order_id
+            initOrderDetailArry()
+        })
+        .then(postOrderDetail)
         .catch(err => console.log(err))
-}
-
-function processOrders(jsonData) {
-    orderId = jsonData.order_id
-
-    initOrderDetailArry()
-
-    postOrderDetail()
-
-    localStorage.removeItem(sc.cartKey)
 }
 
 function postOrderDetail() {
@@ -94,11 +89,12 @@ function postOrderDetail() {
         },
         body: JSON.stringify(orderDetailArray)
     })
-        .then(data => data.json())
-        .then(() => {
+        .then(response => response.json())
+        .then(jsonData => {
+            console.log(jsonData)
+            localStorage.removeItem(sc.cartKey)
             window.location.href='./checkout_finished'
         })
-        .catch(err => console.log(err))
 }
 
 function initOrderDetailArry() {
