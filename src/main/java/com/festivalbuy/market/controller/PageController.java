@@ -53,4 +53,14 @@ public class PageController {
 	String header() {
 		return "header";
 	}
+	
+	@RequestMapping("/footer")
+	String footer() {
+		return "footer";
+	}
+	
+	@RequestMapping("/sidebar")
+	String sidebar() {
+		return "sidebar";
+	}
 }

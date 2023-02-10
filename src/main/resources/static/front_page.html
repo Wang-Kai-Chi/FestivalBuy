@@ -10,36 +10,16 @@
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script type="module" src="./js/FrontPage.js"></script>
     <script src="./js/Header.js"></script>
+    <script src="./js/Footer.js"></script>
+    <script src="./js/Sidebar.js"></script>
 </head>
 
 <body>
     <header class="p-3 text-bg-dark">
     </header>
     <main class="d-flex flex-nowrap">
-        <div class="flex-shrink-0 p-3 bg-white" style="width: 280px;">
-            <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
-                <span class="fs-5 fw-semibold">商品分類</span>
-            </a>
-            <ul class="list-unstyled ps-0">
-                <li class="mb-1">
-                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-                        data-bs-toggle="collapse" aria-expanded="false">
-                        年菜
-                    </button>
-                </li>
-                <li class="mb-1">
-                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-                        data-bs-toggle="collapse" aria-expanded="false">
-                        零食
-                    </button>
-                </li>
-                <li class="mb-1">
-                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-                        data-bs-toggle="collapse" aria-expanded="false">
-                        飲料
-                    </button>
-                </li>
-            </ul>
+        <div class="flex-shrink-0 p-3 bg-white" id="f-sidebar" style="width: 280px;">
+            
         </div>
         <div class="container px-4 py-5" id="custom-cards">
             <h2 class="pb-2 border-bottom">熱門商品</h2>
@@ -48,9 +28,7 @@
         </div>
     </main>
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <div class="col-md-4 d-flex align-items-center">
-            <span class="mb-3 mb-md-0 text-muted">© 2023 FestivalBuy</span>
-        </div>
+        
     </footer>
 </body>
 
