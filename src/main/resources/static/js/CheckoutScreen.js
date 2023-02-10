@@ -142,7 +142,7 @@ function initOrderDetailArry() {
 
 function getPayment(value) {
     const payment = ["信用卡線上刷卡", "7-11取貨付款", "悠遊卡", "ATM付款(轉帳/線上繳款)"]
-    return payment[parseInt(value) - 1]
+    return payment[parseInt(value)-1]
 }
 
 function getFullDateString() {
