@@ -41,7 +41,23 @@ function handleSubmit(event) {
 
     setOrderInfo(obj)
 
-    postData()
+    handlePost(event)
+}
+
+function handlePost(event){
+    let isPostAllow = true
+    
+    for (const i in productOrderBody) {
+        if (productOrderBody[i] == null)
+            isPostAllow = false
+    }
+    
+    if (isPostAllow)
+        postData()
+    else {
+        event.preventDefault()
+        alert("資料填寫未完成")
+    }
 }
 
 function setOrderInfo(obj) {
@@ -93,8 +109,10 @@ function postOrderDetail() {
         .then(jsonData => {
             console.log(jsonData)
             localStorage.removeItem(sc.cartKey)
-            window.location.href='./checkout_finished'
+            if (!alert("訂單已送出"))
+                window.location.href = "/"
         })
+        .catch(err => alert(err))
 }
 
 function initOrderDetailArry() {

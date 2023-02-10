@@ -22,6 +22,9 @@ function main() {
         saveOrderInfo()
 
         setDeleteAllBtnListener()
+    }else{
+        if(!alert("你沒有購買任何商品"))
+            window.location.href = "/"
     }
 }
 
