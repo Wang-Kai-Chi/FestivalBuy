@@ -94,26 +94,6 @@ function postData() {
         })
 }
 
-function checkResponse(response) {
-    if (response.ok) {
-        let isPostAllow = true
-
-        for (const i in productOrderBody) {
-            if (productOrderBody[i] == null)
-                isPostAllow = false
-        }
-
-        if (isPostAllow)
-            return response
-        else {
-            if (!alert("資料填寫未完成"))
-                location.reload()
-        }
-    }else{
-        alert(response)
-    }
-}
-
 function postOrderDetail() {
     fetch("/api/order_details", {
         method: "post",
@@ -125,12 +105,12 @@ function postOrderDetail() {
         body: JSON.stringify(orderDetailArray)
     })
         .then(response => response.json())
-        .then(jsonData => {
+        .then(() => {
             localStorage.removeItem(sc.cartKey)
             if (!alert("訂單已送出"))
-                window.location.href = "/"
+                location.href = "/order_tracking"
         })
-        .catch(err => {
+        .catch(() => {
             if(!alert("傳送失敗"))
                 location.href = "/shopping_cart"
         })
