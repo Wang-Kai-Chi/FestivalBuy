@@ -22,8 +22,8 @@ function main() {
 }
 
 function handleSubmit(event) {
-    //event.preventDefault()
-
+    event.preventDefault()
+    
     const formData = new FormData(event.target)
     const obj = Object.fromEntries(formData.entries())
 
@@ -43,7 +43,8 @@ const postData = async function () {
         method: "post",
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Keep-Alive': 'timeout=2000'
         },
         body: JSON.stringify(postBody)
     })
@@ -54,7 +55,7 @@ const postData = async function () {
         })
         .catch(err => {
             alert("登入失敗，請重新確認電子郵件和密碼")
-            document.location.reload()
+            location.reload()
         })
 }
 

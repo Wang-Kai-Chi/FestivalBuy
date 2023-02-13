@@ -1,13 +1,20 @@
+import * as cookieParser from "./util/CookieParser.js"
 
 main()
 
 function main() {
-    const url = "/api/order_details/customer/1"
+    const id = getCustomerId()
+    const url = "/api/order_details/customer/"+id
     fetch(url)
         .then(data => data.json())
         .then(jsonData => showData(jsonData))
         .catch((err) => console.log(err))
 
+}
+
+function getCustomerId() {
+    const cookie = cookieParser.parseCookie(document.cookie)
+    return cookie.customer_id
 }
 
 function showData(jsonData) {

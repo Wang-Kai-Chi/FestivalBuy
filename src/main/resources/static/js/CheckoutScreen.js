@@ -1,9 +1,9 @@
 import * as te from "./util/StorageTemp.js"
 import * as lsProcessor from "./util/LocalStorageProcessor.js"
 import * as sc from "./util/StringCollection.js"
+import * as cookieParser from "./util/CookieParser.js"
 
 const storageTemp = te.temp
-let storage
 let orderId = 0
 
 const productOrderBody = {
@@ -25,39 +25,30 @@ const orderDetailArray = []
 main()
 
 function main() {
-    storage = lsProcessor.load(sc.cartKey)
+    const storage = lsProcessor.load(sc.cartKey)
 
     if (storage != null) {
         storageTemp.cart = storage
-
-        const form = document.querySelector("form")
-        form.addEventListener("submit", handleSubmit)
+    } else {
+        if (!alert("你沒有購買任何商品"))
+            window.location.href = "/"
     }
+
+    const form = document.querySelector("form")
+    form.addEventListener("submit", handleSubmit)
 }
 
 function handleSubmit(event) {
+    event.preventDefault()
+    
     const formData = new FormData(event.target)
     const obj = Object.fromEntries(formData.entries())
 
     setOrderInfo(obj)
 
-    handlePost(event)
-}
+    console.log(productOrderBody)
 
-function handlePost(event){
-    let isPostAllow = true
-    
-    for (const i in productOrderBody) {
-        if (productOrderBody[i] == null)
-            isPostAllow = false
-    }
-    
-    if (isPostAllow)
-        postData()
-    else {
-        event.preventDefault()
-        alert("資料填寫未完成")
-    }
+    postData()
 }
 
 function setOrderInfo(obj) {
@@ -73,27 +64,54 @@ function setOrderInfo(obj) {
     productOrderBody.status = "處理中"
 
     productOrderBody.order_id = orderId
-    productOrderBody.customer.customer_id = 1
-
+    productOrderBody.customer.customer_id = getCustomerId()
 }
 
-function postData(){
+function getCustomerId() {
+    const cookie = cookieParser.parseCookie(document.cookie)
+    return cookie.customer_id
+}
+
+function postData() {
     fetch("/api/orders", {
         method: "post",
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Keep-Alive': 'timeout=2000'
         },
         body: JSON.stringify(productOrderBody)
     })
         .then(response => response.json())
         .then(jsonData => {
-            console.log(jsonData)
             orderId = jsonData.order_id
             initOrderDetailArry()
         })
-        .then(postOrderDetail)
-        .catch(err => console.log(err))
+        .then(()=>postOrderDetail())
+        .catch(err =>{
+            alert("資料填寫未完成")
+            location.href = "/shopping_cart"
+        })
+}
+
+function checkResponse(response) {
+    if (response.ok) {
+        let isPostAllow = true
+
+        for (const i in productOrderBody) {
+            if (productOrderBody[i] == null)
+                isPostAllow = false
+        }
+
+        if (isPostAllow)
+            return response
+        else {
+            if (!alert("資料填寫未完成"))
+                location.reload()
+        }
+    }else{
+        alert(response)
+    }
 }
 
 function postOrderDetail() {
@@ -101,18 +119,21 @@ function postOrderDetail() {
         method: "post",
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Keep-Alive': 'timeout=2000'
         },
         body: JSON.stringify(orderDetailArray)
     })
         .then(response => response.json())
         .then(jsonData => {
-            console.log(jsonData)
             localStorage.removeItem(sc.cartKey)
             if (!alert("訂單已送出"))
                 window.location.href = "/"
         })
-        .catch(err => alert(err))
+        .catch(err => {
+            if(!alert("傳送失敗"))
+                location.href = "/shopping_cart"
+        })
 }
 
 function initOrderDetailArry() {
@@ -142,7 +163,7 @@ function initOrderDetailArry() {
 
 function getPayment(value) {
     const payment = ["信用卡線上刷卡", "7-11取貨付款", "悠遊卡", "ATM付款(轉帳/線上繳款)"]
-    return payment[parseInt(value)-1]
+    return payment[parseInt(value) - 1]
 }
 
 function getFullDateString() {
