@@ -77,7 +77,7 @@ function setOrderInfo(obj) {
 
 }
 
-function postData() {
+function postData(){
     fetch("/api/orders", {
         method: "POST",
         headers: {
