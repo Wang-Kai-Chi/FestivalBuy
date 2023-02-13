@@ -16,14 +16,21 @@ async function getHeader() {
 }
 
 function checkLoginState(){
-    if (document.cookie != "") {
-        const cookie = cookieParser.parseCookie(document.cookie)
+    const userCookie = document.cookie
+
+    if (userCookie != "") {
+        const cookie = cookieParser.parseCookie(userCookie)
         console.log(cookie)
 
         if (cookie.customer_id != null) {
             document.querySelector("#header-user-action").innerHTML =
-            `<button type="button" class="btn btn-danger" onclick="">登出</button>`
+            `<button type="button" id="logout-btn" class="btn btn-danger" onclick="">登出</button>`
             console.log(document.querySelector("#header-user-action").innerHTML)
+            
+            document.querySelector("#logout-btn").onclick = ()=>{
+                cookieParser.deleteAllCookies(userCookie)
+                location.href = "/"
+            }
         }
     }
 }
