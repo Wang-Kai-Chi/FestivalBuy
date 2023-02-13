@@ -79,7 +79,7 @@ function setOrderInfo(obj) {
 
 function postData(){
     fetch("/api/orders", {
-        method: "POST",
+        method: "post",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'

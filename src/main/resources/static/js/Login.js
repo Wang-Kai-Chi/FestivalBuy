@@ -8,12 +8,21 @@ const postBody = {
 main()
 
 function main() {
+    if (document.cookie != "") {
+        const cookie = cookieParser.parseCookie(document.cookie)
+        console.log(cookie)
+
+        if (cookie.customer_id != null) {
+            if (!alert("已經登入"))
+                location.href = "/"
+        }
+    }
     const form = document.querySelector("form")
     form.addEventListener("submit", handleSubmit)
 }
 
 function handleSubmit(event) {
-    event.preventDefault()
+    //event.preventDefault()
 
     const formData = new FormData(event.target)
     const obj = Object.fromEntries(formData.entries())
@@ -31,7 +40,7 @@ function setBody(obj) {
 
 const postData = async function () {
     fetch("/api/customers/check", {
-        method: "POST",
+        method: "post",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -41,6 +50,7 @@ const postData = async function () {
         .then(response => response.json())
         .then(jsonData => {
             saveCookie(jsonData)
+            location.href = "/"
         })
         .catch(err => {
             alert("登入失敗，請重新確認電子郵件和密碼")
@@ -48,15 +58,15 @@ const postData = async function () {
         })
 }
 
-function saveCookie(jsonData = {}){
+function saveCookie(jsonData = {}) {
     const keys = Object.keys(jsonData)
     const values = []
 
-    for(const k of keys)
+    for (const k of keys)
         values.push(jsonData[k])
 
-    for(const i in keys)
-        document.cookie = keys[i]+"="+values[i]+";"
+    for (const i in keys)
+        document.cookie = keys[i] + "=" + values[i] + ";"
 
-    console.log(cookieParser.parseCookie(document.cookie))
+    console.log(document.cookie)
 }
