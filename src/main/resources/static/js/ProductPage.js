@@ -1,4 +1,4 @@
-import * as cookieParser from "./util/CookieParser.js"
+import * as cok from "./util/CookieLoader.js"
 import * as sc from "./util/StringCollection.js"
 import * as te from "./util/StorageTemp.js"
 import * as lsProcessor from "./util/LocalStorageProcessor.js"
@@ -10,21 +10,17 @@ main()
 
 function main() {
     window.onload = () => {
-        const cookieObj = cookieParser.parseCookie(document.cookie)
         const storage = lsProcessor.load(sc.cartKey)
 
         if (storage != null) {
             temp.cart = storage
         }
-
-        console.log(cookieObj)
-
-        fetchData(cookieObj)
+        fetchData()
     }
 }
 
-async function fetchData(cookieObj) {
-    let url = "/api/products/" + cookieObj.current_product
+async function fetchData() {
+    let url = "/api/products/"+cok.current_product()
     fetch(url)
         .then(data => data.json())
         .then(value => parseValue(value))
@@ -80,17 +76,8 @@ const setBuyBtnListener = data => {
 }
 
 function buyProduct(data) {
-    if (isLogin())
+    if (cok.isLogin())
         removeBtnAndInput(data)
-}
-
-function isLogin() {
-    const cookie = cookieParser.parseCookie(document.cookie)
-    if (cookie.customer_id == null) {
-        if (!alert("請先登入"))
-            location.href = "/login"
-    } else
-        return true
 }
 
 function removeBtnAndInput(data) {

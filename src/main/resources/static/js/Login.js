@@ -1,4 +1,4 @@
-import * as cookieParser from "./util/CookieParser.js"
+import * as cok from "./util/CookieLoader.js"
 
 const postBody = {
     "email": "museum@gmail.com",
@@ -8,15 +8,8 @@ const postBody = {
 main()
 
 function main() {
-    if (document.cookie != "") {
-        const cookie = cookieParser.parseCookie(document.cookie)
-        console.log(cookie)
+    cok.redirectIfAlreadyLogin()
 
-        if (cookie.customer_id != null) {
-            if (!alert("已經登入"))
-                location.href = "/"
-        }
-    }
     const form = document.querySelector("form")
     form.addEventListener("submit", handleSubmit)
 }
