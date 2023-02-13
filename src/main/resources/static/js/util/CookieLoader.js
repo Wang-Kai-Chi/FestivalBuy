@@ -4,7 +4,7 @@ export const cookie = () => {
     return cookieParser.parseCookie(document.cookie)
 }
 export function isLogin() {
-    if (cookie.customer_id == null) {
+    if (cookie().customer_id == null) {
         if (!alert("請先登入"))
             location.href = "/login"
     } else

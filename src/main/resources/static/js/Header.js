@@ -28,6 +28,7 @@ function checkLoginState(){
             console.log(document.querySelector("#header-user-action").innerHTML)
             
             document.querySelector("#logout-btn").onclick = ()=>{
+                localStorage.clear()
                 cookieParser.deleteAllCookies(userCookie)
                 location.href = "/"
             }
