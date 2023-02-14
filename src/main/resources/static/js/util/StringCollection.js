@@ -2,7 +2,7 @@ export const dollar = "$"
 
 export const btnPrefix = "gobtn-"
 
-export const cookieName = "current_product"
+export const currentProduct = "current_product"
 
 export const cartKey = "cart"
 
