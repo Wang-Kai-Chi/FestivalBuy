@@ -39,6 +39,18 @@ public class ProductService {
 
 		return product;
 	}
+	
+	public ArrayList<Product> getProductByCategoryName(String cname){
+		ArrayList<Product> temp = new ArrayList<>();
+		
+		for(Product p :productList) {
+			if(p.getCategory().getName().equals(cname)) 
+				temp.add(p);
+			
+		}
+		
+		return temp;
+	}
 
 	public ArrayList<Product> getProductList() {
 		return productList;

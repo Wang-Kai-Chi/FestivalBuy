@@ -63,4 +63,9 @@ public class PageController {
 	String sidebar() {
 		return "sidebar";
 	}
+	
+	@RequestMapping("/chatbot")
+	String chatbot() {
+		return "chatbot";
+	}
 }
