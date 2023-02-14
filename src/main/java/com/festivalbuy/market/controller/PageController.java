@@ -64,8 +64,8 @@ public class PageController {
 		return "sidebar";
 	}
 	
-	@RequestMapping("/chatbot")
-	String chatbot() {
-		return "chatbot";
+	@RequestMapping("/search_result")
+	String search_result() {
+		return "search_result";
 	}
 }

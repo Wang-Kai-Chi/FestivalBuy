@@ -20,7 +20,7 @@ public class DialogflowWebhookController {
     @Autowired
     private ChatBot chatBot;
 
-    @PostMapping()
+    @PostMapping
     String serveAction(@RequestBody String body, @RequestHeader Map<String, String> headers) {
         try {
             return chatBot.handleRequest(body, headers).get();
