@@ -8,10 +8,7 @@ import com.google.actions.api.ActionResponse;
 import com.google.actions.api.DialogflowApp;
 import com.google.actions.api.ForIntent;
 import com.google.actions.api.response.ResponseBuilder;
-import com.google.api.services.actions_fulfillment.v2.model.HtmlResponse;
-
 import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,43 +16,23 @@ import org.springframework.stereotype.Component;
 public class ChatBot extends DialogflowApp {
 	@Autowired
 	private ProductService productService;
+	private ActionResponse resTemp;
 
 	@ForIntent("FindProductByCategory")
 	public ActionResponse findProductByCategory(ActionRequest request) {
 		String parameter = (String) request.getParameter("category");
+		ResponseBuilder responseBuilder = getResponseBuilder(request);
 		
-		ResponseBuilder responseBuilder = getResponseBuilder(request)
-				.add(getResultString(parameter));
-		return responseBuilder.build();
+		responseBuilder.add(getProductJson(productService.getProductByCategoryName(parameter)));
+		
+		ActionResponse response = responseBuilder.build();
+		resTemp = response;
+		
+		return response;
 	}
 	
-	String getResultString(String parameter) {
-		ArrayList<Product> ps = productService.getProductByCategoryName(parameter);
-		
-		String result = "";
-		
-		for(Product p :ps)
-			result += p.getTitle()+":"+"$"+p.getPrice();
-		
-		return result;
-	}
-	
-	HtmlResponse getResult(String parameter) {
-		HtmlResponse h = new HtmlResponse();
-		ArrayList<Product> ps = productService.getProductByCategoryName(parameter);
-		
-		String result = "";
-		
-		for(Product p :ps)
-			result += p.getTitle()+":"+"$"+p.getPrice();
-		
-		h.set("response", result);
-		
-		return h;
-	}
-
-	String getAllProductJson() {
-		return getProductJson(productService.getProductList());
+	public ActionResponse getResTemp() {
+		return resTemp;
 	}
 
 	String getProductJson(ArrayList<Product> products) {

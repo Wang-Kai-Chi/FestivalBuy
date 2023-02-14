@@ -1,7 +1,10 @@
 package com.festivalbuy.market.controller;
 
 import com.festivalbuy.market.ChatBot;
+import com.google.actions.api.ActionResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -26,6 +29,11 @@ public class DialogflowWebhookController {
         }catch (ExecutionException e) {
         	return handleError(e);
 		}
+    }
+    
+    @GetMapping
+    ActionResponse getResponse() {
+    	return chatBot.getResTemp();
     }
 
     private String handleError(Exception e) {
