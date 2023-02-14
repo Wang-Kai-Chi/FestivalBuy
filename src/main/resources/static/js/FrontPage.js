@@ -3,18 +3,19 @@ import * as sc from "./util/StringCollection.js"
 main()
 
 function main() {
-    const products = []
-
     const url = "/api/products"
     fetch(url)
-        .then(data => data.json())
-        .then(value => showData(value, products))
-        .catch((err) => console.log(err))
-
+    .then(data => data.json())
+    .then(value => showData(value))
+    .catch((err) => console.log(err))
+    
 }
 
-const showData = (value, products) => {
-    products.push(value[1], value[2], value[3])
+const showData = (value) => {
+    const products = []
+
+    for(let i = 0;i<3;i++)
+        products.push(value[i])
 
     for (const i in products) {
         const product = products[i]
