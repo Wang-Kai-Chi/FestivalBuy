@@ -1,6 +1,7 @@
 package com.festivalbuy.market.service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import com.festivalbuy.market.repo.ProductRepository;
 @Service
 public class ProductService {
 	private ProductRepository productRepository;
+	
 	private ArrayList<Product> productList;
 	private String prefix = "/imgs/";
 
@@ -40,19 +42,17 @@ public class ProductService {
 		return product;
 	}
 	
-	public ArrayList<Product> getProductByCategoryName(String cname){
+	public List<Product> getProductByCategoryName(String cname){
 		ArrayList<Product> temp = new ArrayList<>();
 		
 		for(Product p :productList) {
 			if(p.getCategory().getName().equals(cname)) 
 				temp.add(p);
-			
 		}
-		
 		return temp;
 	}
 
-	public ArrayList<Product> getProductList() {
+	public List<Product> getProductList() {
 		return productList;
 	}
 

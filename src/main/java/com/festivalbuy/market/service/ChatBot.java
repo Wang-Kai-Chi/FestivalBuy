@@ -9,6 +9,8 @@ import com.google.actions.api.DialogflowApp;
 import com.google.actions.api.ForIntent;
 import com.google.actions.api.response.ResponseBuilder;
 import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -41,11 +43,11 @@ public class ChatBot extends DialogflowApp {
 		return resTemp;
 	}
 
-	String getProductJson(ArrayList<Product> products) {
+	String getProductJson(List<Product> list) {
 		ObjectMapper mapper = new ObjectMapper();
 		String result = "";
 		try {
-			result = mapper.writeValueAsString(products);
+			result = mapper.writeValueAsString(list);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
