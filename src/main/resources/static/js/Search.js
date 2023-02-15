@@ -1,50 +1,77 @@
 import * as sc from "./util/StringCollection.js"
+import * as lsProcessor from "./util/LocalStorageProcessor.js"
+
+let searchText
 
 main()
 
-function main(){
-    const text = "生鮮"
-    postSearch(text)
+function main() {
+    searchText = lsProcessor.load("search")
+    postSearch(searchText)
 }
 
-function postSearch(text = "我要找商品"){
-    const auth = "Bearer ya29.a0AVvZVsqIRYgEYMLtAcFPiylno80A5wmyTdVDfGyDY5FjQQzWVAu0WYjBNJy1MVUHasyfoP9TAAe3giYJMxxF26VX0PW59wDBmOYe6N00hgywFPrI2my_Ja5uD1XMl455AjqHzwoBIjiRypg0LpVEy3YJYTVVwlZ05YGlUYFgtdAt4Xq_SD-mpc2zBlNfLsD1lPHwOSIugVdIu-mu2k-ouc8LcoKCo6igRermlV6TmdDyS8oaCgYKAckSARESFQGbdwaIBdijeWqquoAh61RQEXl0tA0246" 
+function postSearch(text = "我要找商品") {
+    const auth = "Bearer ya29.a0AVvZVsrSLBKcVKTzKhvMdfuPfzUK00olI4vjKmO0dYgOhmxruHAet-YV8Yw-n3NLl3AwlhwXqLkmJouRC1pVW2AaiSvr_j_65V9ZJgcKV0RxLc_NHADUXgKuqn6fSgEFI6P7k53bW6ay74uHyoutsCgHdPjFn-E6FkygyxAc75uXSgSJas9fCxd6QYKlQt9whw29cgMLVpk1MDuOgd3vNbdw8V1aWEgYnUKHxwwbq-1F3IIaCgYKAQ8SARESFQGbdwaIVwD2QCUbqtEkUT8b76UGyg0246"
     const url = "https://dialogflow.googleapis.com/v2/projects/newagent-rywr/agent/sessions/d21e6f8f-df75-1fbe-6c6c-c2dfcaae1fd3:detectIntent"
     const body = {
-        "queryInput":{
-            "text":{
-                "text":text,
-                "languageCode":"zh-tw"
+        "queryInput": {
+            "text": {
+                "text": text,
+                "languageCode": "zh-tw"
             }
         },
-        "queryParams":{
-            "source":"DIALOGFLOW_CONSOLE",
-            "timeZone":"Asia/Taipei",
-            "sentimentAnalysisRequestConfig":{
-                "analyzeQueryTextSentiment":true
+        "queryParams": {
+            "source": "DIALOGFLOW_CONSOLE",
+            "timeZone": "Asia/Taipei",
+            "sentimentAnalysisRequestConfig": {
+                "analyzeQueryTextSentiment": true
             }
         }
     }
     fetch(url, {
-        method:"post",
-        headers:{
+        method: "post",
+        headers: {
             'Content-Type': 'application/json',
             'Authorization': auth,
             'Keep-Alive': 'timeout=2000'
         },
         body: JSON.stringify(body)
     }).then(response => response.json())
-    .then(jsonData => {
-        console.log(jsonData)
-        const value = JSON.parse(jsonData.queryResult.fulfillmentText)
-        showData(value)
-    })
-    .catch(err =>console.log(err))
+        .then(jsonData => {
+            const fulfillmentText = jsonData.queryResult.fulfillmentText
+            console.log(fulfillmentText)
+
+            const value = getParseJson(fulfillmentText)
+            console.log(value)
+
+            renderResult(value)
+        })
+        .catch(err => console.log(err))
 }
+
+function getParseJson(text) {
+    try {
+        return JSON.parse(text)
+    } catch (err) {
+        return text
+    }
+}
+
+function renderResult(value) {
+    if (value.constructor == Array){
+        document.querySelector("#search-title").innerHTML = "這是您搜尋"+searchText+"的結果"
+        showData(value)
+    }
+    else if (value.constructor == String)
+        document.querySelector("#search-title").innerHTML = value
+    else
+    document.querySelector("#search-title").innerHTML = "找不到您要的結果，請再搜尋一次"
+}
+
 const showData = (value) => {
     const products = []
 
-    for(let i = 0;i<3;i++)
+    for (const i in value)
         products.push(value[i])
 
     for (const i in products) {
