@@ -50,7 +50,7 @@ const setBtnListener = products => {
     for (const i in products) {
         document.querySelector("." + sc.btnPrefix + i).onclick = () => {
             const product = products[i]
-            document.cookie = sc.cookieName + '=' + product.product_id
+            document.cookie = sc.currentProduct + '=' + product.product_id
         }
     }
 }
