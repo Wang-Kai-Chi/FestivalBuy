@@ -1,6 +1,6 @@
 package com.festivalbuy.market.controller;
 
-import com.festivalbuy.market.ChatBot;
+import com.festivalbuy.market.service.ChatBot;
 import com.google.actions.api.ActionResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;

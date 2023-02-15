@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.festivalbuy.market.ProductOrderService;
-import com.festivalbuy.market.ProductService;
 import com.festivalbuy.market.entity.OrderDetail;
 import com.festivalbuy.market.entity.OrderDetailKey;
 import com.festivalbuy.market.entity.Product;
 import com.festivalbuy.market.entity.ProductOrder;
 import com.festivalbuy.market.repo.OrderDetailRepository;
 import com.festivalbuy.market.repo.ProductOrderRepository;
+import com.festivalbuy.market.service.ProductOrderService;
+import com.festivalbuy.market.service.ProductService;
 
 @RestController
 @RequestMapping("/api/order_details")
@@ -80,13 +80,13 @@ public class OrderDetailController {
 		ArrayList<OrderDetail> detailList = (ArrayList<OrderDetail>) orderDetails;
 
 		for (OrderDetail o : detailList) {
-			OrderDetailKey old = o.getOrderDetailKey();
-			OrderDetailKey key = new OrderDetailKey();
+			OrderDetailKey oldK = o.getOrderDetailKey();
+			OrderDetailKey newK = new OrderDetailKey();
 
-			key.setProduct(productService.findProductById(old.getProduct().getProduct_id()));
-			key.setProductOrder(productOrderService.getOrderWithKey(old.getProductOrder().getOrder_id()));
+			newK.setProduct(productService.findProductById(oldK.getProduct().getProduct_id()));
+			newK.setProductOrder(productOrderService.getOrderWithKey(oldK.getProductOrder().getOrder_id()));
 
-			o.setOrderDetailKey(key);
+			o.setOrderDetailKey(newK);
 		}
 
 		return orderDetailRepo.saveAll(detailList);

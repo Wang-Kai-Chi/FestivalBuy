@@ -1,4 +1,4 @@
-package com.festivalbuy.market;
+package com.festivalbuy.market.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

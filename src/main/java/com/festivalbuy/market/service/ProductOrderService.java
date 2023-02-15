@@ -1,4 +1,4 @@
-package com.festivalbuy.market;
+package com.festivalbuy.market.service;
 
 import java.util.ArrayList;
 import java.util.Optional;

@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.festivalbuy.market.ProductService;
 import com.festivalbuy.market.entity.Product;
+import com.festivalbuy.market.service.ProductService;
 
 @RestController
 @RequestMapping("/api/products")
