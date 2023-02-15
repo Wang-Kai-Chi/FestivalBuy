@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.festivalbuy.market.ProductOrderService;
 import com.festivalbuy.market.ProductService;
 import com.festivalbuy.market.entity.OrderDetail;
 import com.festivalbuy.market.entity.OrderDetailKey;
@@ -27,7 +28,7 @@ public class OrderDetailController {
 	@Autowired
 	private ProductService productService;
 	@Autowired
-	private ProductOrderRepository productOrderRepo;
+	private ProductOrderService productOrderService;
 
 	@GetMapping
 	Iterable<OrderDetail> getOrderDetails() {
@@ -48,7 +49,7 @@ public class OrderDetailController {
 	}
 
 	public ArrayList<OrderDetail> getOrderDetailsWithSameCustomer(Integer customerId) {
-		ArrayList<ProductOrder> orderList = getOrdersWithSameCustomer(customerId);
+		ArrayList<ProductOrder> orderList = productOrderService.getOrdersWithSameCustomer(customerId);
 
 		ArrayList<OrderDetail> detailList = (ArrayList<OrderDetail>) getOrderDetails();
 		ArrayList<OrderDetail> temp = new ArrayList<>();
@@ -64,26 +65,11 @@ public class OrderDetailController {
 		return temp;
 	}
 
-	public ArrayList<ProductOrder> getOrdersWithSameCustomer(Integer customerId) {
-		ArrayList<ProductOrder> orderList = (ArrayList<ProductOrder>) productOrderRepo.findAll();
-		ArrayList<ProductOrder> temp = new ArrayList<>();
-
-		for (ProductOrder p : orderList) {
-			if (p.getCustomer().getCustomer_id() == customerId) {
-				Integer orderId = p.getOrder_id();
-
-				temp.add(getOrderWithKey(orderId));
-			}
-		}
-
-		return temp;
-	}
-
 	@GetMapping("/{orderId}/{productId}")
 	Optional<OrderDetail> getOrderDetailByCompositeId(@PathVariable Integer orderId, @PathVariable Integer productId) {
 		OrderDetailKey orderDetailKey = new OrderDetailKey();
 
-		orderDetailKey.setProductOrder(getOrderWithKey(orderId));
+		orderDetailKey.setProductOrder(productOrderService.getOrderWithKey(orderId));
 		orderDetailKey.setProduct(productService.findProductById(productId));
 
 		return orderDetailRepo.findById(orderDetailKey);
@@ -98,18 +84,11 @@ public class OrderDetailController {
 			OrderDetailKey key = new OrderDetailKey();
 
 			key.setProduct(productService.findProductById(old.getProduct().getProduct_id()));
-			key.setProductOrder(getOrderWithKey(old.getProductOrder().getOrder_id()));
+			key.setProductOrder(productOrderService.getOrderWithKey(old.getProductOrder().getOrder_id()));
 
 			o.setOrderDetailKey(key);
 		}
 
 		return orderDetailRepo.saveAll(detailList);
-	}
-
-	private ProductOrder getOrderWithKey(Integer id) {
-		Optional<ProductOrder> po = productOrderRepo.findById(id);
-
-		return (po.isPresent()) ? po.get() : null;
-
 	}
 }

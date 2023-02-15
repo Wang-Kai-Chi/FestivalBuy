@@ -11,26 +11,32 @@ import com.google.actions.api.response.ResponseBuilder;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class ChatBot extends DialogflowApp {
 	@Autowired
 	private ProductService productService;
+	
 	private ActionResponse resTemp;
 
 	@ForIntent("FindProductByCategory")
 	public ActionResponse findProductByCategory(ActionRequest request) {
-		String parameter = (String) request.getParameter("category");
 		ResponseBuilder responseBuilder = getResponseBuilder(request);
-		
+
+		String parameter = (String) request.getParameter("category");
 		responseBuilder.add(getProductJson(productService.getProductByCategoryName(parameter)));
-		
+
 		ActionResponse response = responseBuilder.build();
-		resTemp = response;
-		
+		setResTemp(response);
+
 		return response;
 	}
-	
+
+	public void setResTemp(ActionResponse resTemp) {
+		this.resTemp = resTemp;
+	}
+
 	public ActionResponse getResTemp() {
 		return resTemp;
 	}

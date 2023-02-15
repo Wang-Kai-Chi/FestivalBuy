@@ -38,7 +38,6 @@ public class DialogflowWebhookController {
 
     private String handleError(Exception e) {
         e.printStackTrace();
-        System.out.println("Error in App.handleRequest "+e);
         return "Error handling the intent - " + e.getMessage();
     }
 }
