@@ -1,6 +1,7 @@
 import * as sc from "./util/StringCollection.js"
 import * as lsProcessor from "./util/LocalStorageProcessor.js"
 
+
 let searchText
 
 main()
@@ -11,7 +12,7 @@ function main() {
 }
 
 function postSearch(text = "我要找商品") {
-    const auth = "Bearer ya29.a0AVvZVsphVMpVhhjJLxMSO2jUrlPFGaQXIGxB3Lo8uqWyErdoPdc2__fu1S9XwHwI0qG0gHhLj731ko2YRULkFvsf7F5W9fF0gxtSxhMlw0piN-4BUO5_SBLv2G_1IIqYgGFvzrg2qRlPuzDnq9GGJ6uO4IELTX3tCWcUCcNrPMB2Zi_gb-13GBADdJYlp5AfAY-a3bLYvS5p0TLtDKZgDTlrMJ-6vapU6Hs9byvhrr0y9ykaCgYKAbgSARESFQGbdwaIO-vPB0inpUuKBhsPDYQp_A0246"
+    const auth = "Bearer ya29.a0AVvZVspa_BshJnU3gjGiD2rMJQs0jkWFReupJv5zwgCiXlS0J6eqLDr4zAWQytFmgWVMpKuBcDE33B7om9Rf_J1JPLqpuV7v5OC3oHGMnEJKwYCDymkPLYZUEk6QdURqTIucM6T7FxRzxcxRYYg7Eap0H49EUAStKXjU7ioWjdtWFGzkpCzhCfD_XQTQvEIUvRy2B-rvNezZwvY44T8lbK1Gq7kXXq7QPT1LwzaYV0tG1DsaCgYKAfQSARESFQGbdwaI_oZ-1nBWzNpJ9InMlWU7hw0246"
     const url = "https://dialogflow.googleapis.com/v2/projects/newagent-rywr/agent/sessions/d21e6f8f-df75-1fbe-6c6c-c2dfcaae1fd3:detectIntent"
     const body = {
         "queryInput": {

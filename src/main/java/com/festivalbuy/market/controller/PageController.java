@@ -16,11 +16,6 @@ public class PageController {
 		return "checkout_screen";
 	}
 	
-	@RequestMapping("/checkout_finished")
-	String checkout_finished() {
-		return "checkout_finished";
-	}
-	
 	@RequestMapping("/order_tracking")
 	String order_tracking() {
 		return "order_tracking";
@@ -39,15 +34,6 @@ public class PageController {
 	String login() {
 		return "login";
 	}
-	@RequestMapping("/registertest")
-	String registertest() {
-		return "registertest";
-	}
-	
-	@RequestMapping("/memberV2")
-	String memberV2() {
-		return "memberV2";
-	}
 	
 	@RequestMapping("/header")
 	String header() {
@@ -57,11 +43,6 @@ public class PageController {
 	@RequestMapping("/footer")
 	String footer() {
 		return "footer";
-	}
-	
-	@RequestMapping("/sidebar")
-	String sidebar() {
-		return "sidebar";
 	}
 	
 	@RequestMapping("/search_result")
