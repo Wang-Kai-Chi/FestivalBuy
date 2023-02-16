@@ -60,7 +60,7 @@ function getParseJson(text) {
 function renderResult(value) {
     if (value.constructor == Array){
         document.querySelector("#search-title").innerHTML = "這是您搜尋"+searchText+"的結果"
-        card.appendProducts(value, value.length, "#search-result")
+        card.appendProducts(value, "#search-result")
     }
     else if (value.constructor == String)
         document.querySelector("#search-title").innerHTML = value

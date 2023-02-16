@@ -51,6 +51,16 @@ public class ProductService {
 		}
 		return temp;
 	}
+	
+	public List<Product> getProductByCategoryId(Integer cid){
+		ArrayList<Product> temp = new ArrayList<>();
+		
+		for(Product p :productList) {
+			if(p.getCategory().getCategory_id().equals(cid)) 
+				temp.add(p);
+		}
+		return temp;
+	}
 
 	public List<Product> getProductList() {
 		return productList;

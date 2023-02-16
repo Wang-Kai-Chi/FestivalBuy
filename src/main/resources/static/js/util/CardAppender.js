@@ -1,11 +1,12 @@
 const btnPrefix = "gobtn-"
 const currentProduct = "current_product"
 
-export const appendProducts = (value, length = 1, elementId = "#") => {
+export const appendProducts = (value = [], elementId = "#",range = Array.from(Array(value.length).keys())) => {
     const products = []
 
-    for (let i = 0; i < length; i++)
+    for (const i of range){
         products.push(value[i])
+    }
 
     for (const i in products) {
         const product = products[i]
