@@ -1,7 +1,7 @@
 const btnPrefix = "gobtn-"
 const currentProduct = "current_product"
 
-export const appendProducts = (value = [], elementId = "#",range = Array.from(Array(value.length).keys())) => {
+export function appendProducts(value = [], elementId = "#",range = Array.from(Array(value.length).keys())){
     const products = []
 
     for (const i of range){
@@ -14,7 +14,7 @@ export const appendProducts = (value = [], elementId = "#",range = Array.from(Ar
             imageurl: product.imageurl,
             title: product.title,
             price: "$" + product.price,
-            id: btnPrefix + i
+            id: btnPrefix + product.product_id
         }
         const hotProduct = getCard(temp)
 
@@ -39,8 +39,8 @@ const getCard = value => {
 
 const setBuyBtn = products => {
     for (const i in products) {
-        document.querySelector("." + btnPrefix + i).onclick = () => {
-            const product = products[i]
+        const product = products[i]
+        document.querySelector("." + btnPrefix + product.product_id).onclick = () => {
             document.cookie = currentProduct + '=' + product.product_id
         }
     }
