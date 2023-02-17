@@ -11,6 +11,9 @@ async function getHeader() {
     fetch("./header")
         .then(response => response.text())
         .then(data => {
+            const header = document.querySelector("header")
+            header.classList.add('p-2')
+            header.classList.add('text-bg-dark')
             document.querySelector("header").innerHTML = data
             checkLoginState()
             const searchBtn = document.querySelector("#search-submit")
