@@ -30,7 +30,7 @@ const getCard = value => {
         <img src="${value.imageurl}" class="card-img-top" alt="...">
         <div class="card-body">
         <h5 class="card-title">${value.title}</h5>
-        <p class="card-text">${value.price}</p>
+        <h5 class="card-text text-danger">${value.price}</h5>
         <a href="/product_page" class="${value.id} btn btn-primary">購買</a>
         </div>
     </div>

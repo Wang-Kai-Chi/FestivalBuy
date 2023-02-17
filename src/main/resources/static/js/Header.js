@@ -42,16 +42,19 @@ function checkLoginState() {
 
             document.querySelector("#logout-btn").onclick = () => handleLogout(userCookie)
 
-            document.querySelector("#user-dropdown").onclick = () => {
-                const menu = document.querySelector(".dropdown-menu")
-
-                if (menu.classList.contains('show'))
-                    menu.classList.remove('show')
-                else
-                    menu.classList.add('show')
-            }
+            setTouchDropDown()
         }
     }
+}
+
+function setTouchDropDown() {
+    const menu = document.querySelector(".dropdown-menu")
+
+    document.querySelector(".dropdown").onmouseenter =
+        () => menu.classList.add('show')
+
+    document.querySelector(".dropdown").onmouseleave =
+        () => menu.classList.remove('show')
 }
 
 const userDropDown = (name) => {
