@@ -20,7 +20,6 @@ function getCustomerId() {
 function showData(jsonData) {
     const orderTable = document.querySelector("#tracking-body")
     refreshTable(orderTable, jsonData)
-
 }
 
 function refreshTable(table, jsonData) {
