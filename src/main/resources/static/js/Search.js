@@ -11,7 +11,7 @@ function main() {
 }
 
 function postSearch(text = "我要找商品") {
-    const auth = "Bearer ya29.a0AVvZVspn7CR1lGinnAIqxfsrqU0WIcVlgkZLh10H8jhPwQHkcSSF22BKBDMs2iBE6OG5RE5RpNi9U4ft_O9FOtxORHWl3JwNI0fnb1hz5-EkzZQM4BGIJj_QXcoVx6WM9eCXseIpZxb6ksvzrC68qHgUGB_cF3DxiVOVlZqEskainVXs-tncRew9YChf908DZiRJi3mpSJznqv4f9Z_MikXIzFn_V2hTB9zn08MBmAaAeLEaCgYKAU8SARESFQGbdwaIxz2wNLNmkbwFIU8wvVg5cQ0246"
+    const auth = "Bearer ya29.a0AVvZVsp-zmaFUxi5JgNqwPLIJ_JePhPeJbghG7u_KcWFUhVnkhAMhQtiFkmpf6DPFzS2wax7arlNbkVXD4iZy8g-HNjrCwXkX0GyRg8bf4Hc8zsp0WB1DaotGJAlll-aOpPiyYq6lNlxyVxzkc4fEZebvCMyASkR1JoyqDiRuMckoWJjeoyzK582ZzQgBxYSATzqKtn_l9qrLAgNCgT2QTIs10qYidTYh8ClFeARGFE9BwaCgYKAdISARESFQGbdwaIkNVzfGYFy1FSmCn3YfLKFg0245"
     const url = "https://dialogflow.googleapis.com/v2/projects/newagent-rywr/agent/sessions/d21e6f8f-df75-1fbe-6c6c-c2dfcaae1fd3:detectIntent"
     const body = {
         "queryInput": {
