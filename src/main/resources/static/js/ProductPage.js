@@ -1,10 +1,14 @@
 import * as cok from "./util/CookieLoader.js"
 import * as sc from "./util/StringCollection.js"
-import * as te from "./util/StorageTemp.js"
 import * as lsProcessor from "./util/LocalStorageProcessor.js"
 
-const temp = te.temp
 const elementIds = sc.productPageIds
+
+let cart= {
+    "customer": {},
+    "info": {},
+    "list": {}
+}
 
 main()
 
@@ -13,7 +17,7 @@ function main() {
         const storage = lsProcessor.load(sc.cartKey)
 
         if (storage != null) {
-            temp.cart = storage
+            cart = storage
         }
         fetchData()
     }
@@ -48,20 +52,20 @@ const renderPage = (value) => {
 const setOrder = productData => {
     const quantity = getProductQuantity()
 
-    temp.orderDetail = {
+    const orderDetail = {
         product: productData,
         quantity: quantity,
         subtotal: quantity * productData.price
     }
 
-    saveOrderDetailToOrders(temp.cart)
+    saveOrderDetailToOrders(cart, orderDetail)
 
-    setBuyBtnListener(temp.cart)
+    setBuyBtnListener(cart)
 }
 
-const saveOrderDetailToOrders = cart => {
-    let productId = temp.orderDetail.product.product_id
-    cart.list[`${productId}`] = temp.orderDetail
+const saveOrderDetailToOrders = (cart, orderDetail) => {
+    let productId = orderDetail.product.product_id
+    cart.list[`${productId}`] = orderDetail
 }
 
 const getProductQuantity = () => {

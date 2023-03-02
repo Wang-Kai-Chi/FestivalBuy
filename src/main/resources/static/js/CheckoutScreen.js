@@ -1,10 +1,14 @@
-import * as te from "./util/StorageTemp.js"
 import * as lsProcessor from "./util/LocalStorageProcessor.js"
 import * as sc from "./util/StringCollection.js"
 import * as cookieParser from "./util/CookieParser.js"
 
-const storageTemp = te.temp
 let orderId = 0
+
+let cart= {
+    "customer": {},
+    "info": {},
+    "list": {}
+}
 
 const productOrderBody = {
     "order_id": 3,
@@ -28,12 +32,15 @@ function main() {
     const storage = lsProcessor.load(sc.cartKey)
 
     if (storage != null) {
-        storageTemp.cart = storage
+        cart = storage
+        handleCartStorage()
     } else {
         if (!alert("你沒有購買任何商品"))
             window.location.href = "/"
     }
+}
 
+function handleCartStorage(){
     const form = document.querySelector("form")
     form.addEventListener("submit", handleSubmit)
 }
@@ -117,7 +124,8 @@ function postOrderDetail() {
 }
 
 function initOrderDetailArry() {
-    const plist = storageTemp.cart.list
+    const plist = cart.list
+    
     for (const i in plist) {
         let orderDetailBody = {
             "orderDetailKey": {

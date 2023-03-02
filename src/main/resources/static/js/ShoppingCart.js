@@ -1,10 +1,14 @@
 import * as sc from "./util/StringCollection.js"
-import * as te from "./util/StorageTemp.js"
 import * as lsProcessor from "./util/LocalStorageProcessor.js"
 
 const elementIds = sc.ShoppingCartIds
-const temp = te.temp
 let totalMoney = 0
+
+let cart = {
+    "customer": {},
+    "info": {},
+    "list": {}
+}
 
 main()
 
@@ -12,21 +16,24 @@ function main() {
     const storage = lsProcessor.load(sc.cartKey)
 
     if (storage != null) {
-        temp.cart = storage
-
-        const cartTable = document.querySelector(elementIds.cbody)
-        
-        refreshTable(cartTable, temp.cart.list)
-
-        document.querySelector(elementIds.subtotal).innerHTML = parseInt(totalMoney)
-        
-        saveOrderInfo()
-
-        setDeleteAllBtnListener()
-    }else{
-        if(!alert("你沒有購買任何商品"))
+        cart = storage
+        handleCartStorage()
+    } else {
+        if (!alert("你沒有購買任何商品"))
             window.location.href = "/"
     }
+}
+
+function handleCartStorage() {
+    const cartTable = document.querySelector(elementIds.cbody)
+
+    refreshTable(cartTable, cart.list)
+
+    document.querySelector(elementIds.subtotal).innerHTML = parseInt(totalMoney)
+
+    saveOrderInfo()
+
+    setDeleteAllBtnListener()
 }
 
 function setDeleteAllBtnListener() {
@@ -37,10 +44,20 @@ function setDeleteAllBtnListener() {
 }
 
 function saveOrderInfo() {
-    temp.info.order_total = parseInt(totalMoney)
-    temp.cart.info = temp.info
-    lsProcessor.save(sc.cartKey, temp.cart)
-    console.log(temp.cart)
+    const info = {
+        "order_date": "YYYY-MM-DD hh:mm:ss",
+        "order_total": 0,
+        "status": "processing",
+        "shipping_address": "place",
+        "payment_method": "method",
+        "recipient_name": "john",
+        "recipient_phone": "123"
+    }
+    
+    info.order_total = parseInt(totalMoney)
+    cart.info = info
+    lsProcessor.save(sc.cartKey, cart)
+    console.log(cart)
 }
 
 function refreshTable(table, list) {
@@ -57,7 +74,7 @@ function refreshTable(table, list) {
 
 function appendDataToTable(table, data) {
     const row = table.insertRow()
-    const cells = cartDataMap()
+    const cells = getCartDataMap()
 
     for (let i in cells) {
         cells[i] = row.insertCell()
@@ -66,7 +83,7 @@ function appendDataToTable(table, data) {
 }
 
 function getTbody(orderDetail, product) {
-    let tbody = cartDataMap()
+    let tbody = getCartDataMap()
 
     tbody.details = `<img src="${product.imageurl}" width="120">` + product.title
     tbody.price = product.price
@@ -77,7 +94,7 @@ function getTbody(orderDetail, product) {
     return tbody
 }
 
-function cartDataMap() {
+function getCartDataMap() {
     return {
         details: null,
         price: null,
