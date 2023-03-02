@@ -49,3 +49,7 @@ export function saveOrderInfo(totalMoney = 0) {
     cart.info = info
     lsProcessor.save(key, cart)
 }
+
+export function saveCart(cart){
+    lsProcessor.save(key, cart)
+}

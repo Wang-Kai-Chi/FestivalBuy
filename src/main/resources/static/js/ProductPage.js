@@ -1,5 +1,4 @@
 import * as cok from "./util/CookieLoader.js"
-import * as lsProcessor from "./util/LocalStorageProcessor.js"
 import * as cartData from "./CartDataAccessor.js"
 
 const productPageIds = {
@@ -70,18 +69,19 @@ const getProductQuantity = () => {
     return eQuantity.value
 }
 
-const setBuyBtnListener = data => {
+const setBuyBtnListener = cart => {
     const btn = document.querySelector(productPageIds.btn)
-    btn.onclick = () => buyProduct(data)
+    btn.onclick = () => buyProduct(cart)
 }
 
-function buyProduct(data) {
-    if (cok.isLogin())
-        removeBtnAndInput(data)
+function buyProduct(cart) {
+    if (cok.isLogin()){
+        cartData.saveCart(cart)
+        removeBtnAndInput()
+    }
 }
 
-function removeBtnAndInput(data) {
-    lsProcessor.save(cartData.getKey(), data)
+function removeBtnAndInput() {
     document.querySelector("#buy-place").innerHTML = `<button type="button" 
     class="btn btn-warning btn-lg px-4 me-md-2">已購買</button>`
 
