@@ -1,14 +1,8 @@
-import * as lsProcessor from "./util/LocalStorageProcessor.js"
 import * as sc from "./util/StringCollection.js"
 import * as cookieParser from "./util/CookieParser.js"
+import * as cartData from "./CartDataAccessor.js"
 
 let orderId = 0
-
-let cart= {
-    "customer": {},
-    "info": {},
-    "list": {}
-}
 
 const productOrderBody = {
     "order_id": 3,
@@ -29,25 +23,18 @@ const orderDetailArray = []
 main()
 
 function main() {
-    const storage = lsProcessor.load(sc.cartKey)
-
-    if (storage != null) {
-        cart = storage
-        handleCartStorage()
-    } else {
-        if (!alert("你沒有購買任何商品"))
-            window.location.href = "/"
-    }
+    cartData.run(handleCartStorage)
 }
 
-function handleCartStorage(){
+function handleCartStorage() {
+    console.log(cartData.getCart())
     const form = document.querySelector("form")
     form.addEventListener("submit", handleSubmit)
 }
 
 function handleSubmit(event) {
     event.preventDefault()
-    
+
     const formData = new FormData(event.target)
     const obj = Object.fromEntries(formData.entries())
 
@@ -59,14 +46,14 @@ function handleSubmit(event) {
 }
 
 function setOrderInfo(obj) {
-    const storage = lsProcessor.load(sc.cartKey)
+    const cart = cartData.getCart()
 
     productOrderBody.payment_method = getPayment(obj.payment)
     productOrderBody.order_date = getFullDateString()
     productOrderBody.recipient_name = obj.username
     productOrderBody.recipient_phone = obj.phone
 
-    productOrderBody.order_total = storage.info.order_total
+    productOrderBody.order_total = cart.info.order_total
     productOrderBody.shipping_address = obj.address
     productOrderBody.status = "處理中"
 
@@ -94,8 +81,8 @@ function postData() {
             orderId = jsonData.order_id
             initOrderDetailArry()
         })
-        .then(()=>postOrderDetail())
-        .catch(err =>{
+        .then(() => postOrderDetail())
+        .catch(err => {
             alert("資料填寫未完成")
             location.href = "/shopping_cart"
         })
@@ -118,14 +105,14 @@ function postOrderDetail() {
                 location.href = "/order_tracking"
         })
         .catch(() => {
-            if(!alert("傳送失敗"))
+            if (!alert("傳送失敗"))
                 location.href = "/shopping_cart"
         })
 }
 
 function initOrderDetailArry() {
-    const plist = cart.list
-    
+    const plist = cartData.getCart().list
+
     for (const i in plist) {
         let orderDetailBody = {
             "orderDetailKey": {

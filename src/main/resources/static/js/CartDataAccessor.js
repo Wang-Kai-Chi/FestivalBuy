@@ -32,3 +32,20 @@ export function getCart() {
 export function getKey(){
     return key
 }
+
+export function saveOrderInfo(totalMoney = 0) {
+    const info = {
+        "order_date": "YYYY-MM-DD hh:mm:ss",
+        "order_total": 0,
+        "status": "processing",
+        "shipping_address": "place",
+        "payment_method": "method",
+        "recipient_name": "john",
+        "recipient_phone": "123"
+    }
+
+    info.order_total = parseInt(totalMoney)
+    
+    cart.info = info
+    lsProcessor.save(key, cart)
+}

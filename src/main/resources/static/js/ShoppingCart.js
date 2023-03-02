@@ -1,63 +1,35 @@
-import * as sc from "./util/StringCollection.js"
-import * as lsProcessor from "./util/LocalStorageProcessor.js"
+import * as cartData from "./CartDataAccessor.js"
 
-const elementIds = sc.ShoppingCartIds
-let totalMoney = 0
-
-let cart = {
-    "customer": {},
-    "info": {},
-    "list": {}
+const ShoppingCartIds = {
+    cbody: "#cart-body",
+    aldelete: "#delete-all",
+    subtotal: "#sub-total"
 }
+let totalMoney = 0
 
 main()
 
 function main() {
-    const storage = lsProcessor.load(sc.cartKey)
-
-    if (storage != null) {
-        cart = storage
-        handleCartStorage()
-    } else {
-        if (!alert("你沒有購買任何商品"))
-            window.location.href = "/"
-    }
+    cartData.run(handleCartStorage)
 }
 
 function handleCartStorage() {
-    const cartTable = document.querySelector(elementIds.cbody)
+    const cartTable = document.querySelector(ShoppingCartIds.cbody)
 
-    refreshTable(cartTable, cart.list)
+    refreshTable(cartTable, cartData.getCart().list)
 
-    document.querySelector(elementIds.subtotal).innerHTML = parseInt(totalMoney)
+    document.querySelector(ShoppingCartIds.subtotal).innerHTML = parseInt(totalMoney)
 
-    saveOrderInfo()
+    cartData.saveOrderInfo(totalMoney)
 
     setDeleteAllBtnListener()
 }
 
 function setDeleteAllBtnListener() {
-    document.querySelector(sc.ShoppingCartIds.aldelete).onclick = () => {
-        localStorage.removeItem(sc.cartKey)
+    document.querySelector(ShoppingCartIds.aldelete).onclick = () => {
+        localStorage.removeItem(cartData.getKey())
         document.location.reload()
     }
-}
-
-function saveOrderInfo() {
-    const info = {
-        "order_date": "YYYY-MM-DD hh:mm:ss",
-        "order_total": 0,
-        "status": "processing",
-        "shipping_address": "place",
-        "payment_method": "method",
-        "recipient_name": "john",
-        "recipient_phone": "123"
-    }
-    
-    info.order_total = parseInt(totalMoney)
-    cart.info = info
-    lsProcessor.save(sc.cartKey, cart)
-    console.log(cart)
 }
 
 function refreshTable(table, list) {
