@@ -15,6 +15,7 @@ function main() {
         temp.cart = storage
 
         const cartTable = document.querySelector(elementIds.cbody)
+        
         refreshTable(cartTable, temp.cart.list)
 
         document.querySelector(elementIds.subtotal).innerHTML = parseInt(totalMoney)

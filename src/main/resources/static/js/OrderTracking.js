@@ -1,10 +1,11 @@
 import * as cookieParser from "./util/CookieParser.js"
+import * as tableRenderer from "./util/TableRenderer.js"
 
 main()
 
 function main() {
     const id = getCustomerId()
-    const url = "/api/order_details/customer/"+id
+    const url = "/api/order_details/customer/" + id
     fetch(url)
         .then(data => data.json())
         .then(jsonData => showData(jsonData))
@@ -19,31 +20,17 @@ function getCustomerId() {
 
 function showData(jsonData) {
     const orderTable = document.querySelector("#tracking-body")
-    refreshTable(orderTable, jsonData)
+
+    tableRenderer.refreshTable({
+        htmlTable: orderTable,
+        getTbody: getOrderTbody,
+        getDataMap: orderDataMap,
+        "jsonData": jsonData
+    })
 }
 
-function refreshTable(table, jsonData) {
-    for (let i in jsonData) {
-        const detail = jsonData[i]
-
-        const data = getOrderTbody(detail)
-        appendDataToTable(table, data)
-    }
-}
-
-
-function appendDataToTable(table, data) {
-    const row = table.insertRow()
-    const cells = orderDataMap()
-
-    for (let i in cells) {
-        cells[i] = row.insertCell()
-        cells[i].innerHTML = data[i]
-    }
-}
-
-function getOrderTbody(detail) {
-    const tbody = orderDataMap()
+function getOrderTbody(detail, cells = {}) {
+    const tbody = cells
 
     const ckey = detail.orderDetailKey
     const order = ckey.productOrder
