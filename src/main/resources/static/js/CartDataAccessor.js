@@ -1,13 +1,14 @@
 import * as lsProcessor from "./util/LocalStorageProcessor.js"
 
-let cart= {
+let cart = {
     "customer": {},
     "info": {},
     "list": {}
 }
+const key = "cart"
 
-function run(handleCartStorage =()=>{}){
-    const storage = lsProcessor.load(sc.cartKey)
+export function run(handleCartStorage = () => { }) {
+    const storage = lsProcessor.load(key)
 
     if (storage != null) {
         cart = storage
@@ -18,6 +19,16 @@ function run(handleCartStorage =()=>{}){
     }
 }
 
-function getCart(){
+export function loadStorageToCart() {
+    const storage = lsProcessor.load(key)
+    if (storage != null)
+        cart = storage
+}
+
+export function getCart() {
     return cart
+}
+
+export function getKey(){
+    return key
 }

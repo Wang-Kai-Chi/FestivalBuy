@@ -1,24 +1,21 @@
 import * as cok from "./util/CookieLoader.js"
-import * as sc from "./util/StringCollection.js"
 import * as lsProcessor from "./util/LocalStorageProcessor.js"
+import * as cartData from "./CartDataAccessor.js"
 
-const elementIds = sc.productPageIds
-
-let cart= {
-    "customer": {},
-    "info": {},
-    "list": {}
+const productPageIds = {
+    name: "#pname",
+    price: "#pprice",
+    descripion: "#pdescripion",
+    img: "#pimg",
+    quantity: "#pquantity",
+    btn: "#gobtn-cart"
 }
 
 main()
 
 function main() {
     window.onload = () => {
-        const storage = lsProcessor.load(sc.cartKey)
-
-        if (storage != null) {
-            cart = storage
-        }
+        cartData.loadStorageToCart()
         fetchData()
     }
 }
@@ -36,30 +33,29 @@ const parseValue = value => {
 
     setOrder(value)
 
-    document.querySelector(elementIds.quantity).onchange = () => {
+    document.querySelector(productPageIds.quantity).onchange = () => {
         setOrder(value)
     }
 }
 
 const renderPage = (value) => {
-    document.querySelector(elementIds.name).innerHTML = value.title
-    document.querySelector(elementIds.price).innerHTML = sc.dollar + value.price
-    document.querySelector(elementIds.descripion).innerHTML = value.description
+    document.querySelector(productPageIds.name).innerHTML = value.title
+    document.querySelector(productPageIds.price).innerHTML = "$" + value.price
+    document.querySelector(productPageIds.descripion).innerHTML = value.description
 
-    document.querySelector(elementIds.img).src = value.imageurl
+    document.querySelector(productPageIds.img).src = value.imageurl
 }
 
 const setOrder = productData => {
     const quantity = getProductQuantity()
-
     const orderDetail = {
         product: productData,
         quantity: quantity,
         subtotal: quantity * productData.price
     }
+    const cart = cartData.getCart()
 
     saveOrderDetailToOrders(cart, orderDetail)
-
     setBuyBtnListener(cart)
 }
 
@@ -69,13 +65,13 @@ const saveOrderDetailToOrders = (cart, orderDetail) => {
 }
 
 const getProductQuantity = () => {
-    const eQuantity = document.querySelector(elementIds.quantity)
+    const eQuantity = document.querySelector(productPageIds.quantity)
     eQuantity.value = Math.min(Math.max(eQuantity.min, eQuantity.value), eQuantity.max)
     return eQuantity.value
 }
 
 const setBuyBtnListener = data => {
-    const btn = document.querySelector(elementIds.btn)
+    const btn = document.querySelector(productPageIds.btn)
     btn.onclick = () => buyProduct(data)
 }
 
@@ -85,11 +81,11 @@ function buyProduct(data) {
 }
 
 function removeBtnAndInput(data) {
-    lsProcessor.save(sc.cartKey, data)
+    lsProcessor.save(cartData.getKey(), data)
     document.querySelector("#buy-place").innerHTML = `<button type="button" 
     class="btn btn-warning btn-lg px-4 me-md-2">已購買</button>`
 
-    document.querySelector(elementIds.quantity).remove()
+    document.querySelector(productPageIds.quantity).remove()
     document.querySelector(".qtext").remove()
 
     document.querySelector("#gobtn-cart").remove()
