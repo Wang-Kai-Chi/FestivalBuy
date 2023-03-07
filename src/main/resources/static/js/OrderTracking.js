@@ -29,10 +29,10 @@ function showData(jsonData) {
     })
 }
 
-function getOrderTbody(detail, cells = {}) {
+function getOrderTbody(json, cells = {}) {
     const tbody = cells
 
-    const ckey = detail.orderDetailKey
+    const ckey = json.orderDetailKey
     const order = ckey.productOrder
     const product = ckey.product
 
@@ -43,7 +43,7 @@ function getOrderTbody(detail, cells = {}) {
     tbody.img = `<img src="${product.imageurl}" width="120px" alt=""></img>`
 
     tbody.title = product.title
-    tbody.quantity = detail.quantity
+    tbody.quantity = json.quantity
     tbody.status = order.status
 
     return tbody

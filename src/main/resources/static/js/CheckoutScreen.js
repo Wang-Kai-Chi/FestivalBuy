@@ -1,7 +1,8 @@
 import * as sc from "./util/StringCollection.js"
 import * as cookieParser from "./util/CookieParser.js"
-import * as cartData from "./CartDataAccessor.js"
+import * as cda from "./cart/CartDataAccessor.js"
 
+const cartData = cda.getObj()
 let orderId = 0
 
 const productOrderBody = {

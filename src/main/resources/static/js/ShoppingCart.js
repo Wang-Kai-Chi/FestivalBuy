@@ -1,8 +1,11 @@
-import * as cartData from "./CartDataAccessor.js"
+import * as cda from "./cart/CartDataAccessor.js"
+import * as tableRenderer from "./util/TableRenderer.js"
+
+const cartData = cda.getObj()
 
 const ShoppingCartIds = {
     cbody: "#cart-body",
-    aldelete: "#delete-all",
+    deleteAll: "#delete-all",
     subtotal: "#sub-total"
 }
 let totalMoney = 0
@@ -16,7 +19,14 @@ function main() {
 function handleCartStorage() {
     const cartTable = document.querySelector(ShoppingCartIds.cbody)
 
-    refreshTable(cartTable, cartData.getCart().list)
+	tableRenderer.refreshTable(
+		{
+			htmlTable: cartTable,
+			getTbody: getTbody,
+			getDataMap: getCartDataMap,
+			jsonData: cartData.getCart().list
+		}
+	)
 
     document.querySelector(ShoppingCartIds.subtotal).innerHTML = parseInt(totalMoney)
 
@@ -26,36 +36,15 @@ function handleCartStorage() {
 }
 
 function setDeleteAllBtnListener() {
-    document.querySelector(ShoppingCartIds.aldelete).onclick = () => {
+    document.querySelector(ShoppingCartIds.deleteAll).onclick = () => {
         localStorage.removeItem(cartData.getKey())
         document.location.reload()
     }
 }
 
-function refreshTable(table, list) {
-    for (let i in list) {
-        const orderDetail = list[i]
-
-        const data = getTbody(orderDetail, orderDetail.product)
-        appendDataToTable(table, data)
-
-        totalMoney += orderDetail.subtotal
-    }
-
-}
-
-function appendDataToTable(table, data) {
-    const row = table.insertRow()
-    const cells = getCartDataMap()
-
-    for (let i in cells) {
-        cells[i] = row.insertCell()
-        cells[i].innerHTML = data[i]
-    }
-}
-
-function getTbody(orderDetail, product) {
-    let tbody = getCartDataMap()
+function getTbody(orderDetail, cells = {}) {
+    let tbody = cells
+    const product = orderDetail.product
 
     tbody.details = `<img src="${product.imageurl}" width="120">` + product.title
     tbody.price = product.price
