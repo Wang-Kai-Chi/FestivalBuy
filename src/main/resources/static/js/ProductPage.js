@@ -1,5 +1,7 @@
 import * as cok from "./util/CookieLoader.js"
-import * as cartData from "./CartDataAccessor.js"
+import * as cda from "./cart/CartDataAccessor.js"
+
+const cartDataAccessor = cda.getObj()
 
 const productPageIds = {
     name: "#pname",
@@ -14,7 +16,7 @@ main()
 
 function main() {
     window.onload = () => {
-        cartData.loadStorageToCart()
+        cartDataAccessor.loadStorageToCart()
         fetchData()
     }
 }
@@ -52,7 +54,7 @@ const setOrder = productData => {
         quantity: quantity,
         subtotal: quantity * productData.price
     }
-    const cart = cartData.getCart()
+    const cart = cartDataAccessor.getCart()
 
     saveOrderDetailToOrders(cart, orderDetail)
     setBuyBtnListener(cart)
@@ -76,7 +78,7 @@ const setBuyBtnListener = cart => {
 
 function buyProduct(cart) {
     if (cok.isLogin()){
-        cartData.saveCart(cart)
+        cartDataAccessor.saveCart(cart)
         removeBtnAndInput()
     }
 }
