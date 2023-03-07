@@ -1,6 +1,6 @@
 import * as lsProcessor from "./util/LocalStorageProcessor.js"
 import * as card from "./util/CardAppender.js"
-import * as dfa from "./DialogflowAPI.js"
+import * as dfa from "./secret/DialogflowAPI.js"
 
 let searchText
 const dialogflowAPI = dfa.obj
