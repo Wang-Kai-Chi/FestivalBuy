@@ -30,7 +30,7 @@ public class ProductOrderController {
 		Customer customer = productOrder.getCustomer();
 		
 		productOrder.setCustomer(customerService.getCustomerIfExist(customer));
-		productOrder.setOrder_id(productOrderService.getNewOrderId(productOrder));
+		productOrder.setOrder_id((int) productOrderService.getNewOrderId(productOrder));
 
 		return productOrderService.addOrder(productOrder);
 	}

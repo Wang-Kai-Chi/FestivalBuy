@@ -6,12 +6,11 @@ export function refreshTable(param = {
 }) {
 	for (let i in param.jsonData) {
 		const jd = param.jsonData[i]
-		const map = param.getDataMap()
-		const data = param.getTbody(jd, map)
+		const data = param.getTbody(jd, param.getDataMap())
 
 		appendDataToTable({
 			"htmlTable": param.htmlTable,
-			"cells": map,
+			"cells": param.getDataMap(),
 			"data": data
 		})
 	}

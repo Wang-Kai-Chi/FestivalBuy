@@ -20,18 +20,18 @@ public class OrderDetailService {
 	private ProductService productService;
 	@Autowired
 	private ProductOrderService productOrderService;
-	
+
 	public Iterable<OrderDetail> getOrderDetails() {
 		Iterable<OrderDetail> orderDetails = orderDetailRepo.findAll();
-		
-		for(OrderDetail o: orderDetails) {
-			Product p =o.getOrderDetailKey().getProduct();
+
+		for (OrderDetail o : orderDetails) {
+			Product p = o.getOrderDetailKey().getProduct();
 			p.setImageurl(productService.findProductById(p.getProduct_id()).getImageurl());
 		}
-		
+
 		return orderDetails;
 	}
-	
+
 	public List<OrderDetail> getOrderDetailsWithSameCustomer(Integer customerId) {
 		ArrayList<ProductOrder> orderList = productOrderService.getOrdersWithSameCustomer(customerId);
 
@@ -41,14 +41,14 @@ public class OrderDetailService {
 		for (ProductOrder p : orderList) {
 			for (OrderDetail o : detailList) {
 				OrderDetailKey ok = o.getOrderDetailKey();
-				if (p == ok.getProductOrder()) {
+				if (p.equals(ok.getProductOrder())) {
 					temp.add(o);
 				}
 			}
 		}
 		return temp;
 	}
-	
+
 	public Optional<OrderDetail> getOrderDetailByCompositeId(Integer orderId, Integer productId) {
 		OrderDetailKey orderDetailKey = new OrderDetailKey();
 
@@ -57,7 +57,7 @@ public class OrderDetailService {
 
 		return orderDetailRepo.findById(orderDetailKey);
 	}
-	
+
 	public Iterable<OrderDetail> addOrderDetails(Iterable<OrderDetail> orderDetails) {
 		ArrayList<OrderDetail> detailList = (ArrayList<OrderDetail>) orderDetails;
 

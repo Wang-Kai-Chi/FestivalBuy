@@ -1,6 +1,7 @@
 package com.festivalbuy.market.service;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class ProductOrderService {
 		ArrayList<ProductOrder> temp = new ArrayList<>();
 
 		for (ProductOrder p : orderList) {
-			if (p.getCustomer().getCustomer_id() == customerId) {
+			if (Objects.equals(p.getCustomer().getCustomer_id(), customerId)) {
 				Integer orderId = p.getOrder_id();
 
 				temp.add(getOrderWithKey(orderId));
@@ -37,9 +38,8 @@ public class ProductOrderService {
 		return temp;
 	}
 	
-	public int getNewOrderId(ProductOrder productOrder) {
-		ArrayList<ProductOrder> orderList = (ArrayList<ProductOrder>)productOrderRepo.findAll();
-		int orderSize = orderList.size();
+	public long getNewOrderId(ProductOrder productOrder) {
+		long orderSize = productOrderRepo.count();
 		Integer id = productOrder.getOrder_id();
 
 		return (id <= orderSize) ? ++orderSize : id;
@@ -48,7 +48,7 @@ public class ProductOrderService {
 	public ProductOrder getOrderWithKey(Integer id) {
 		Optional<ProductOrder> order = productOrderRepo.findById(id);
 
-		return (order.isPresent()) ? order.get() : null;
+		return order.orElse(null);
 
 	}
 }
