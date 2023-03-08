@@ -1,69 +1,49 @@
 package com.festivalbuy.market.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.festivalbuy.market.entity.Product;
+import com.festivalbuy.market.repo.CategoryRepository;
 import com.festivalbuy.market.repo.ProductRepository;
 
 @Service
 public class ProductService {
-	private ProductRepository productRepository;
-	
-	private ArrayList<Product> productList;
+	@Autowired
+	private ProductRepository productRepo;
+	@Autowired
+	private CategoryRepository categoryRepo;
+
 	private String prefix = "/imgs/";
 
-	public ProductService(ProductRepository productRepository) {
-		this.productRepository = productRepository;
-
-		productList = getProductsWithNewImageUrl();
-	}
-
-	private ArrayList<Product> getProductsWithNewImageUrl() {
-		ArrayList<Product> products = (ArrayList<Product>) productRepository.findAll();
-		
-		for (Product p : products) 
+	private Iterable<Product> getProductsWithNewImageUrl(Iterable<Product> products) {
+		for (Product p : products)
 			p.setImageurl(prefix + p.getImageurl());
 
 		return products;
 	}
 
+	private Product getProductWithNewImageURL(Product p) {
+		p.setImageurl(prefix + p.getImageurl());
+		return p;
+	}
+
 	public Product findProductById(Integer id) {
-		Product product = null;
-
-		for (Product p : productList) {
-			if (Objects.equals(p.getProduct_id(), id))
-				product = p;
-		}
-
-		return product;
+		return getProductWithNewImageURL(productRepo.findById(id).get());
 	}
-	
-	public List<Product> getProductByCategoryName(String cname){
-		ArrayList<Product> temp = new ArrayList<>();
-		
-		for(Product p :productList) {
-			if(p.getCategory().getName().equals(cname)) 
-				temp.add(p);
-		}
-		return temp;
+
+	public List<Product> getProductByCategoryName(String cname) {
+		return (List<Product>) getProductsWithNewImageUrl(
+				productRepo.findByCategoryId(categoryRepo.findByName(cname).getCategory_id()));
 	}
-	
-	public List<Product> getProductByCategoryId(Integer cid){
-		ArrayList<Product> temp = new ArrayList<>();
-		
-		for(Product p :productList) {
-			if(p.getCategory().getCategory_id().equals(cid)) 
-				temp.add(p);
-		}
-		return temp;
+
+	public List<Product> getProductByCategoryId(Integer cid) {
+		return (List<Product>) getProductsWithNewImageUrl(productRepo.findByCategoryId(cid));
 	}
 
 	public List<Product> getProductList() {
-		return productList;
+		return (List<Product>) getProductsWithNewImageUrl(productRepo.findAll());
 	}
 
 }
