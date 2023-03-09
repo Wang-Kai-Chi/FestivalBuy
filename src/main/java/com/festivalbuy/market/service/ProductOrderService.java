@@ -1,7 +1,6 @@
 package com.festivalbuy.market.service;
 
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,32 +22,19 @@ public class ProductOrderService {
 		return productOrderRepo.save(productOrder);
 	}
 	
-	public ArrayList<ProductOrder> getOrdersWithSameCustomer(Integer customerId) {
-		ArrayList<ProductOrder> orderList = (ArrayList<ProductOrder>) productOrderRepo.findAll();
-		ArrayList<ProductOrder> temp = new ArrayList<>();
+	public List<ProductOrder> findByCustomerId(Integer customerId) {
 
-		for (ProductOrder p : orderList) {
-			if (Objects.equals(p.getCustomer().getCustomer_id(), customerId)) {
-				Integer orderId = p.getOrder_id();
-
-				temp.add(getOrderWithKey(orderId));
-			}
-		}
-
-		return temp;
+		return productOrderRepo.findByCustomerId(customerId);
 	}
 	
-	public long getNewOrderId(ProductOrder productOrder) {
+	public long getNewId(ProductOrder productOrder) {
 		long orderSize = productOrderRepo.count();
 		Integer id = productOrder.getOrder_id();
 
 		return (id <= orderSize) ? ++orderSize : id;
 	}
 	
-	public ProductOrder getOrderWithKey(Integer id) {
-		Optional<ProductOrder> order = productOrderRepo.findById(id);
-
-		return order.orElse(null);
-
+	public ProductOrder findById(Integer id) {
+		return productOrderRepo.findById(id).get();
 	}
 }

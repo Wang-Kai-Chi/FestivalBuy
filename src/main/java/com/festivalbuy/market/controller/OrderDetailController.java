@@ -28,7 +28,7 @@ public class OrderDetailController {
 	@GetMapping("/customer/{customerId}")
 	List<OrderDetail> getOrderDetailByCustomerId(@PathVariable Integer customerId) {
 
-		return orderDetailService.getOrderDetailsWithSameCustomer(customerId);
+		return orderDetailService.getOrderDetailsByCustomerId(customerId);
 	}
 
 	@GetMapping("/{orderId}/{productId}")

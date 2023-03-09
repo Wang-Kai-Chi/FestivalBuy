@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.festivalbuy.market.entity.OrderDetail;
-import com.festivalbuy.market.entity.OrderDetailKey;
+import com.festivalbuy.market.entity.OrderDetailId;
 import com.festivalbuy.market.entity.Product;
 import com.festivalbuy.market.entity.ProductOrder;
 import com.festivalbuy.market.repo.OrderDetailRepository;
@@ -17,60 +17,36 @@ public class OrderDetailService {
 	@Autowired
 	private OrderDetailRepository orderDetailRepo;
 	@Autowired
-	private ProductService productService;
-	@Autowired
 	private ProductOrderService productOrderService;
 
 	public Iterable<OrderDetail> getOrderDetails() {
-		Iterable<OrderDetail> orderDetails = orderDetailRepo.findAll();
-
-		for (OrderDetail o : orderDetails) {
-			Product p = o.getOrderDetailKey().getProduct();
-			p.setImageurl(productService.findProductById(p.getProduct_id()).getImageurl());
-		}
-
-		return orderDetails;
+		return orderDetailRepo.findAll();
 	}
 
-	public List<OrderDetail> getOrderDetailsWithSameCustomer(Integer customerId) {
-		ArrayList<ProductOrder> orderList = productOrderService.getOrdersWithSameCustomer(customerId);
-
-		ArrayList<OrderDetail> detailList = (ArrayList<OrderDetail>) getOrderDetails();
+	public List<OrderDetail> getOrderDetailsByCustomerId(Integer customerId) {
+		ArrayList<ProductOrder> orderList = (ArrayList<ProductOrder>) productOrderService.findByCustomerId(customerId);
 		ArrayList<OrderDetail> temp = new ArrayList<>();
 
 		for (ProductOrder p : orderList) {
-			for (OrderDetail o : detailList) {
-				OrderDetailKey ok = o.getOrderDetailKey();
-				if (p.equals(ok.getProductOrder())) {
-					temp.add(o);
-				}
-			}
+			temp.addAll(orderDetailRepo.findByProductOrderId(p.getOrder_id()));
 		}
 		return temp;
 	}
 
 	public Optional<OrderDetail> getOrderDetailByCompositeId(Integer orderId, Integer productId) {
-		OrderDetailKey orderDetailKey = new OrderDetailKey();
-
-		orderDetailKey.setProductOrder(productOrderService.getOrderWithKey(orderId));
-		orderDetailKey.setProduct(productService.findProductById(productId));
-
-		return orderDetailRepo.findById(orderDetailKey);
+		return orderDetailRepo.findByCompositeId(orderId, productId);
 	}
 
 	public Iterable<OrderDetail> addOrderDetails(Iterable<OrderDetail> orderDetails) {
 		ArrayList<OrderDetail> detailList = (ArrayList<OrderDetail>) orderDetails;
 
 		for (OrderDetail o : detailList) {
-			OrderDetailKey oldK = o.getOrderDetailKey();
-			OrderDetailKey newK = new OrderDetailKey();
-
-			newK.setProduct(productService.findProductById(oldK.getProduct().getProduct_id()));
-			newK.setProductOrder(productOrderService.getOrderWithKey(oldK.getProductOrder().getOrder_id()));
-
-			o.setOrderDetailKey(newK);
+			OrderDetailId oldK = o.getOrderDetailKey();
+			detailList.add(orderDetailRepo.findByCompositeId(
+					oldK.getProduct().getProduct_id(), 
+					oldK.getProductOrder().getOrder_id())
+					.get());
 		}
-
 		return orderDetailRepo.saveAll(detailList);
 	}
 }

@@ -9,7 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Embeddable
-public class OrderDetailKey implements Serializable{
+public class OrderDetailId implements Serializable{
 	private static final long serialVersionUID = 7472997799726336607L;
 
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -48,7 +48,7 @@ public class OrderDetailKey implements Serializable{
 		if(obj == null || getClass() != obj.getClass())
 			return false;
 		
-		OrderDetailKey key = (OrderDetailKey) obj;
+		OrderDetailId key = (OrderDetailId) obj;
 		
 		return productOrder.equals(key.productOrder)&&
 				product.equals(key.product);

@@ -1,6 +1,9 @@
 package com.festivalbuy.market.service;
 
 import java.util.List;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,33 +20,32 @@ public class ProductService {
 
 	private String prefix = "/imgs/";
 
-	private Iterable<Product> getProductsWithNewImageUrl(Iterable<Product> products) {
-		for (Product p : products)
-			p.setImageurl(prefix + p.getImageurl());
+	@PostConstruct
+	void setProductsWithNewImageUrl() {
+		Iterable<Product> products = productRepo.findAll();
+		
+		for (Product p : products) {
+			if(!p.getImageurl().startsWith(prefix))
+				p.setImageurl(prefix + p.getImageurl());
+		}
 
-		return products;
-	}
-
-	private Product getProductWithNewImageURL(Product p) {
-		p.setImageurl(prefix + p.getImageurl());
-		return p;
+		productRepo.saveAll(products);
 	}
 
 	public Product findProductById(Integer id) {
-		return getProductWithNewImageURL(productRepo.findById(id).get());
+		return productRepo.findById(id).get();
 	}
 
 	public List<Product> getProductByCategoryName(String cname) {
-		return (List<Product>) getProductsWithNewImageUrl(
-				productRepo.findByCategoryId(categoryRepo.findByName(cname).getCategory_id()));
+		return productRepo.findByCategoryId(categoryRepo.findByName(cname).getCategory_id());
 	}
 
 	public List<Product> getProductByCategoryId(Integer cid) {
-		return (List<Product>) getProductsWithNewImageUrl(productRepo.findByCategoryId(cid));
+		return productRepo.findByCategoryId(cid);
 	}
 
 	public List<Product> getProductList() {
-		return (List<Product>) getProductsWithNewImageUrl(productRepo.findAll());
+		return productRepo.findAll();
 	}
 
 }

@@ -6,15 +6,15 @@ import javax.persistence.Entity;
 @Entity
 public class OrderDetail {
 	@EmbeddedId
-	private OrderDetailKey orderDetailKey;
+	private OrderDetailId orderDetailKey;
 	
 	private Integer quantity;
 	private Float subtotal;
 	
-	public OrderDetailKey getOrderDetailKey() {
+	public OrderDetailId getOrderDetailKey() {
 		return orderDetailKey;
 	}
-	public void setOrderDetailKey(OrderDetailKey orderDetailKey) {
+	public void setOrderDetailKey(OrderDetailId orderDetailKey) {
 		this.orderDetailKey = orderDetailKey;
 	}
 	public Integer getQuantity() {
